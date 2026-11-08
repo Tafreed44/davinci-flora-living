@@ -54,8 +54,119 @@
       slot(spec, 'phero-img', { photo: key, eager: 1, reveal: 1, par: .07, sizes: '100vw' }) + '<div class="phero-shade" aria-hidden="true"></div>' +
       '<div class="wrap phero-in"><div class="phero-copy">' + o.copy + '</div>' + (o.aside || '') + '</div></section>';
   }
+  /* ---------- Version 2: shared visual pieces ---------- */
+  const MARK = '<svg class="mark" viewBox="0 0 40 48" aria-hidden="true"><path class="mk-a" d="M5 46V21a15 15 0 0130 0v25"/><path class="mk-a" d="M20 41c.2-8.6 2.4-15.4 7.6-21.4"/><path class="mk-l" d="M21.6 31.4c-4.3-.4-7.1-2.8-8-6.7 4.1-.1 7.1 2.2 8 6.7zM23.8 25.4c.3-4 2.8-6.7 6.6-7.5 0 3.9-2.5 6.6-6.6 7.5zM21 37.3c-3.6.8-6.6-.4-8.3-3.3 3.5-.9 6.5.3 8.3 3.3z"/></svg>';
+  /* dappled light: blurred leaf shadows that drift slowly over a picture (decorative) */
+  function leaves(seed) {
+    let a = seed || 7; const r = () => (a = (a * 9301 + 49297) % 233280) / 233280;
+    let g = '';
+    for (let i = 0; i < 34; i++) { const x = r() * 420 - 10, y = r() * 300 - 20, rot = r() * 180, sc = .6 + r() * .9; g += '<ellipse cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" rx="' + (26 * sc).toFixed(1) + '" ry="' + (7 * sc).toFixed(1) + '" transform="rotate(' + rot.toFixed(0) + ' ' + x.toFixed(0) + ' ' + y.toFixed(0) + ')"/>'; }
+    for (let i = 0; i < 5; i++) { const x = r() * 400, y = r() * 200; g += '<path d="M' + x.toFixed(0) + ' ' + y.toFixed(0) + 'q' + (40 + r() * 60).toFixed(0) + ' ' + (30 + r() * 40).toFixed(0) + ' ' + (120 + r() * 80).toFixed(0) + ' ' + (10 + r() * 40).toFixed(0) + '" fill="none" stroke-width="3"/>'; }
+    return '<svg class="dapple" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><g class="dp-g" filter="url(#soft)">' + g + '</g></svg>';
+  }
+  /* a line of arches, drawn like an elevation (decorative) */
+  function arcade(n, cls) {
+    let d = ''; const w = 100;
+    for (let i = 0; i < n; i++) { const x = i * w; d += 'M' + (x + 12) + ' 200V80a38 38 0 0176 0v120'; }
+    return '<svg class="arcade ' + (cls || '') + '" viewBox="0 0 ' + (n * w) + ' 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><path d="' + d + '"/><path d="M0 199.5H' + (n * w) + '"/></svg>';
+  }
+  function badge(text, id) {
+    return '<svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><defs><path id="' + id + '" d="M60 60m-45 0a45 45 0 1190 0a45 45 0 11-90 0"/></defs><text><textPath href="#' + id + '">' + text + '</textPath></text></svg>';
+  }
+  /* Flora shop: an olive tree on a stone plinth, drawn with light and shade (illustration, not a 3D model) */
+  function sculptTree() {
+    let a = 31; const r = () => (a = (a * 9301 + 49297) % 233280) / 233280;
+    const G = ['#4f5e2c', '#66753a', '#7d8a4c', '#93a065', '#3e4a22', '#a8b27c'];
+    let lv = '';
+    for (let i = 0; i < 260; i++) {
+      const t = r() * Math.PI * 2, rr = Math.sqrt(r()), cx = 200 + Math.cos(t) * rr * 128 * (1 + (r() - .5) * .2), cy = 158 + Math.sin(t) * rr * 92;
+      lv += '<ellipse cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" rx="' + (9 + r() * 6).toFixed(1) + '" ry="' + (2.3 + r() * 1.4).toFixed(1) + '" fill="' + G[Math.floor(r() * G.length)] + '" transform="rotate(' + (r() * 360).toFixed(0) + ' ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ')"/>';
+    }
+    let fr = '';
+    for (let i = 0; i < 7; i++) { const t = r() * Math.PI * 2, rr = .35 + r() * .55; fr += '<ellipse cx="' + (200 + Math.cos(t) * rr * 112).toFixed(1) + '" cy="' + (166 + Math.sin(t) * rr * 76).toFixed(1) + '" rx="3.4" ry="4.6" fill="#3a3d22"/>'; }
+    return '<svg class="sculpt" viewBox="0 0 400 520" aria-hidden="true" focusable="false"><defs>' +
+      '<linearGradient id="sc-pot" x1="0" x2="1"><stop offset="0" stop-color="#7d3a1e"/><stop offset=".32" stop-color="#c0673d"/><stop offset=".5" stop-color="#d98a5c"/><stop offset=".78" stop-color="#a24f2a"/><stop offset="1" stop-color="#6a3018"/></linearGradient>' +
+      '<linearGradient id="sc-rim" x1="0" x2="1"><stop offset="0" stop-color="#8a4221"/><stop offset=".45" stop-color="#e09a6c"/><stop offset="1" stop-color="#7a3a1c"/></linearGradient>' +
+      '<linearGradient id="sc-st" x1="0" x2="1"><stop offset="0" stop-color="#b9ab90"/><stop offset=".4" stop-color="#e9e0cc"/><stop offset="1" stop-color="#a99a7e"/></linearGradient>' +
+      '<radialGradient id="sc-sh"><stop offset="0" stop-color="#1c140a" stop-opacity=".55"/><stop offset="1" stop-color="#1c140a" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="sc-lt" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff6d8" stop-opacity=".35"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/></radialGradient></defs>' +
+      '<ellipse class="sc-shadow" cx="206" cy="504" rx="150" ry="16" fill="url(#sc-sh)"/>' +
+      '<g class="sc-base"><path d="M108 420h184v78H108z" fill="url(#sc-st)"/><ellipse cx="200" cy="420" rx="92" ry="12" fill="#efe7d6"/><path d="M108 498h184" stroke="#8d806a" stroke-width="2"/></g>' +
+      '<g class="sc-pot"><path d="M138 318h124l-14 104c-1 6-6 10-12 10h-72c-6 0-11-4-12-10z" fill="url(#sc-pot)"/><path d="M130 304h140v18H130z" fill="url(#sc-rim)"/><ellipse cx="200" cy="304" rx="70" ry="8" fill="#5a2c16"/><ellipse cx="200" cy="305" rx="62" ry="5.5" fill="#3a2614"/><path d="M150 338c30 6 70 6 100 0" stroke="#e8a77d" stroke-opacity=".35" fill="none"/></g>' +
+      '<g class="sc-trunk" fill="none" stroke-linecap="round"><path d="M198 306c-6-40 6-64-10-104" stroke="#5c4a34" stroke-width="13"/><path d="M200 300c10-34 24-58 18-96" stroke="#6b5840" stroke-width="10"/><path d="M196 252c-26-14-38-34-44-60" stroke="#5c4a34" stroke-width="7"/><path d="M212 236c26-10 40-26 50-50" stroke="#6b5840" stroke-width="6"/></g>' +
+      '<g class="sc-leaves">' + lv + fr + '<ellipse cx="200" cy="158" rx="140" ry="100" fill="url(#sc-lt)"/></g></svg>';
+  }
+  /* Living shop: a fan of colour sample cards, held in perspective */
+  function swatchFan() {
+    const C = D.colours.slice(0, 7);
+    return '<div class="fan">' + C.map((c, i) => '<a class="fan-c" href="#product-paint-samples" style="--i:' + (i - (C.length - 1) / 2) + ';--c:' + c[1] + '" aria-label="' + c[0] + ', example tone: order colour samples"><i></i><span><b>' + c[0] + '</b><small>Example tone</small></span></a>').join('') + '</div>';
+  }
+  /* pointer depth: elements with data-depth inside [data-scene] drift with the pointer; cards with data-tilt lean toward it */
+  const FINE = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function scenes(root) {
+    if (RM || !FINE) return;
+    $$('[data-scene]', root).forEach((sc) => {
+      const els = $$('[data-depth]', sc); let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+      const tick = () => { cx += (tx - cx) * .08; cy += (ty - cy) * .08; els.forEach((el) => { const d = parseFloat(el.dataset.depth); el.style.translate = (cx * d * 18).toFixed(2) + 'px ' + (cy * d * 14).toFixed(2) + 'px'; }); raf = Math.abs(tx - cx) + Math.abs(ty - cy) > .002 ? requestAnimationFrame(tick) : 0; };
+      sc.addEventListener('pointermove', (e) => { const b = sc.getBoundingClientRect(); tx = (e.clientX - b.left) / b.width - .5; ty = (e.clientY - b.top) / b.height - .5; if (!raf) raf = requestAnimationFrame(tick); });
+      sc.addEventListener('pointerleave', () => { tx = 0; ty = 0; if (!raf) raf = requestAnimationFrame(tick); });
+    });
+  }
+  document.addEventListener('pointermove', (e) => {
+    if (RM || !FINE) return;
+    const t = e.target.closest && e.target.closest('[data-tilt]'); if (!t) return;
+    const b = t.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - .5, y = (e.clientY - b.top) / b.height - .5;
+    t.style.setProperty('--rx', (-y * 9).toFixed(2) + 'deg'); t.style.setProperty('--ry', (x * 11).toFixed(2) + 'deg');
+    t.style.setProperty('--gx', ((x + .5) * 100).toFixed(0) + '%'); t.style.setProperty('--gy', ((y + .5) * 100).toFixed(0) + '%'); t.classList.add('tilting');
+  });
+  document.addEventListener('pointerout', (e) => { const t = e.target.closest && e.target.closest('[data-tilt]'); if (t && !t.contains(e.relatedTarget)) { t.classList.remove('tilting'); t.style.removeProperty('--rx'); t.style.removeProperty('--ry'); } });
+
   const unit = (p, sel) => p.price + (p.variants || []).reduce((s, v, i) => s + v.opts[sel[i] || 0][1], 0);
   const fromTag = (p) => ((p.variants || []).some((v) => v.opts.some((o) => o[1] > 0)) ? 'From ' : '');
+
+  /* ---------- Version 3: 3D studio, product renders ---------- */
+  /* Every example product has a studio render (img/3d-p-<id>.webp) made by js/studio3d.js.
+     A real photo, once listed in DV_PHOTOS.ready, replaces the render automatically. */
+  const P3D = {
+    'olive-leccino': 1, 'olive-vecchio': 1, 'olive-frantoio': 1, 'lemon-meyer': 1, 'bergamot': 1, 'fig-brown': 1, 'lavender-trio': 1, 'rosemary': 1, 'agave': 1, 'cypress': 1,
+    'pot-impruneta': 1, 'pot-cilindro': 1, 'combo-pair': 1, 'combo-terrace': 1, 'paint-calce': 1, 'paint-samples': 1, 'plaster-lime': 1, 'stucco-veneziano': 1,
+    'tile-zellige': 1, 'tile-esagono': 1, 'micro-kit': 1, 'tool-trowels': 1, 'tool-kit': 1, 'other-tray': 1
+  };
+  function prodMedia(p, cls, o) {
+    o = o || {};
+    if (isReady('p-' + p.id + '-1') || !P3D[p.id]) return slot(p.art, cls, Object.assign({ photo: 'p-' + p.id + '-1', alt: p.name + ', ' + p.sub }, o));
+    return '<div class="ph rend ' + (cls || '') + '"><img src="img/3d-p-' + p.id + '.webp" alt="' + esc(p.name) + ', illustrative 3D render" loading="' + (o.eager ? 'eager' : 'lazy') + '" decoding="async">' +
+      (o.nolabel ? '' : '<span class="phlabel"><span>3D render</span><span class="l2"> · photo to come</span></span>') + (o.inner || '') + '</div>';
+  }
+  const rend = (id, cls) => '<img class="' + (cls || '') + '" src="img/3d-p-' + id + '.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">';
+  function g3(preset, o) {
+    o = o || {};
+    return '<div class="g3 ' + (o.cls || '') + '" data-g3="' + preset + '"' + (o.opts ? " data-g3o='" + JSON.stringify(o.opts) + "'" : '') + '>' +
+      '<img class="g3-poster" src="img/3d-' + (o.poster || preset) + '.webp" alt="' + (o.alt ? esc(o.alt) : '') + '"' + (o.alt ? '' : ' aria-hidden="true"') + ' loading="' + (o.eager ? 'eager' : 'lazy') + '" decoding="async">' +
+      (o.tag === false ? '' : '<span class="g3-tag">Illustrative 3D render</span>') + (o.inner || '') + '</div>';
+  }
+  let g3mod = null, g3live = [];
+  const GL_OK = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })();
+  function mount3d(el) {
+    if (!GL_OK || el.dataset.mounted) return;
+    el.dataset.mounted = '1';
+    const opts = Object.assign({}, el.dataset.g3o ? JSON.parse(el.dataset.g3o) : {});
+    if (el.classList.contains('h3x-gl')) {
+      opts.pointerHost = el.closest('.h3x'); opts.scroll = 1;
+      const pins = $$('.pin', el.closest('.h3x'));
+      const wide = window.matchMedia('(min-width: 961px)');
+      opts.onAnchors = (a) => pins.forEach((p) => { const k = a[p.dataset.k]; if (k && wide.matches) { p.style.left = k[0] + 'px'; p.style.top = k[1] + 'px'; } else { p.style.left = ''; p.style.top = ''; } });
+    }
+    if (el.dataset.drag) opts.drag = 1;
+    (g3mod ? Promise.resolve(g3mod) : import('./studio3d.js')).then((m) => {
+      g3mod = m; if (!document.body.contains(el)) return;
+      try { g3live.push(m.mount(el, el.dataset.g3, opts)); } catch (err) { el.classList.add('gl-fail'); }
+    }).catch(() => el.classList.add('gl-fail'));
+  }
+  function init3d(root) {
+    g3live.forEach((x) => { try { x.destroy(); } catch (e) { /* already gone */ } }); g3live = [];
+    $$('[data-g3]:not([data-lazy3d])', root).forEach(mount3d);
+  }
 
   /* ---------- cart ---------- */
   let cart = [];
@@ -126,45 +237,49 @@
 
   /* ---------- chrome ---------- */
   function mountChrome() {
-    const dd = (s) => '<div class="dd">' + D.shops[s].cats.map((c) => '<a href="#' + s + '-' + c[0] + '">' + c[1] + '</a>').join('') + '<a class="all" href="#' + s + '">Shop all ' + D.shops[s].name + '</a></div>';
-    $('#hdr').innerHTML = '<div class="wrap hdr-in">' +
-      '<nav class="nav" aria-label="Main"><a class="nl" href="#home" data-nav="home">Home</a>' +
-      '<div class="nav-item"><a class="nl" href="#flora" data-nav="flora">Flora<span class="lg"> webshop</span></a>' + dd('flora') + '</div>' +
-      '<div class="nav-item"><a class="nl" href="#living" data-nav="living">Living<span class="lg"> webshop</span></a>' + dd('living') + '</div>' +
+    const mega = (sh) => {
+      const S = D.shops[sh], F = sh === 'flora';
+      const rep = F ? ['olive-leccino', 'lemon-meyer', 'lavender-trio', 'pot-impruneta', 'combo-pair'] : ['paint-calce', 'plaster-lime', 'tile-zellige', 'tool-trowels', 'other-tray'];
+      return '<div class="dd mega ' + sh + '"><div class="mg">' +
+        '<div class="mg-intro"><span class="eyebrow">' + (F ? '01' : '02') + ' · ' + S.name + ' webshop</span><p class="mg-t">' + (F ? 'Trees that grow into <em>the place</em>' : 'Surfaces with <em>depth</em>') + '</p><p class="mg-s">' + (F ? 'Olive and citrus trees, Mediterranean plants, terracotta pots and planters.' : 'Mineral paint, lime plaster, tiles, microcement and the tools to apply them.') + '</p><a class="mg-all" href="#' + sh + '">Shop all ' + S.name + ' ' + ARR + '</a></div>' +
+        '<ul class="mg-cats">' + S.cats.map((c, i) => '<li><a href="#' + sh + '-' + c[0] + '"><span class="mg-r">' + rend(rep[i]) + '</span><span class="t">' + c[1] + '</span><small>' + items(catCount(sh, c[0])) + '</small></a></li>').join('') + '</ul></div></div>';
+    };
+    $('#hdr').innerHTML = '<div class="hdr-bar">' +
+      '<nav class="nav" aria-label="Main">' +
+      '<div class="nav-item"><a class="nl" href="#flora" data-nav="flora">Flora</a>' + mega('flora') + '</div>' +
+      '<div class="nav-item"><a class="nl" href="#living" data-nav="living">Living</a>' + mega('living') + '</div>' +
       '<a class="nl" href="#workshops" data-nav="workshops">Workshops</a></nav>' +
       '<button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mmenu"><i></i><i></i></button>' +
-      '<a class="brand" href="#home" aria-label="DaVinci Flora and Living, home"><b>DaVinci</b><small>Flora &amp; Living</small></a>' +
-      '<div class="nav right"><a class="nl" href="#projects" data-nav="projects">Projects</a><a class="nl" href="#showroom" data-nav="showroom">Showroom<span class="lg"> / Contact</span></a>' +
-      '<button class="ibtn" data-open-search aria-label="Search">' + ICON_S + '</button>' +
-      '<button class="ibtn" data-open-cart aria-label="Open basket">' + ICON_B + '<span class="count" data-count>0</span></button></div>' +
+      '<a class="brand" href="#home" aria-label="DaVinci Flora and Living, home"><span class="key" aria-hidden="true">' + MARK + '</span><span class="bw"><b>DaVinci</b><small>Flora &amp; Living</small></span></a>' +
+      '<div class="nav right"><a class="nl" href="#projects" data-nav="projects">Projects</a><a class="nl" href="#showroom" data-nav="showroom">Showroom<span class="lg">&nbsp;&amp; contact</span></a>' +
+      '<span class="tools"><button class="sbox" data-open-search aria-label="Search both shops">' + ICON_S + '<span class="lg2">Search</span><kbd class="lg2" aria-hidden="true">/</kbd></button><button class="bag" data-open-cart aria-label="Open basket">' + ICON_B + '<span class="lg2">Basket</span><span class="count" data-count>0</span></button></span></div>' +
       '<div class="mob-r"><button class="ibtn" data-open-search aria-label="Search">' + ICON_S + '</button><button class="ibtn" data-open-cart aria-label="Open basket">' + ICON_B + '<span class="count" data-count>0</span></button></div></div>';
-    $('#mmenu').innerHTML = '<div>' + [['home', 'Home'], ['flora', 'Flora webshop'], ['living', 'Living webshop'], ['workshops', 'Workshops'], ['projects', 'Projects'], ['showroom', 'Showroom / Contact']].map((l, i) => '<a class="big" style="--i:' + i + '" href="#' + l[0] + '">' + l[1] + '</a>').join('') + '</div>' +
+    $('#mmenu').innerHTML = '<div class="mm-links">' + [['home', 'Home'], ['workshops', 'Workshops'], ['projects', 'Projects'], ['showroom', 'Showroom & contact']].map((l, i) => '<a class="big" style="--i:' + i + '" href="#' + l[0] + '">' + l[1] + '</a>').join('') + '</div>' +
+      '<div class="mm-worlds"><a class="mmw flora" href="#flora" style="--i:4">' + rend('olive-leccino', 'mmw-r') + '<small>01 · Webshop</small><b>Flora</b><span>Trees, plants &amp; pots</span></a><a class="mmw living" href="#living" style="--i:5">' + rend('tile-zellige', 'mmw-r') + '<small>02 · Webshop</small><b>Living</b><span>Paint, plaster &amp; tiles</span></a></div>' +
       '<div class="mmenu-foot"><button class="link" data-open-search>Search</button><button class="link" data-open-cart>Basket (<span data-count>0</span>)</button></div>';
     $('#ftr').innerHTML = footerHTML();
     updateCount();
   }
   function footerHTML() {
     const l = (sh) => D.shops[sh].cats.map((c) => '<li><a href="#' + sh + '-' + c[0] + '">' + c[1] + '</a></li>').join('');
-    return '<div class="wrap"><div class="ftr-lead"><p class="big">Two webshops.<br>One DaVinci.</p>' +
-      '<div class="ftr-news"><p>New arrivals and workshop dates, about once a month.</p><form class="nl-form" data-form="news" novalidate><label class="sr" for="nl-mail">Email address</label><input id="nl-mail" type="email" placeholder="Your email address" autocomplete="email"><button type="submit">Sign up</button></form><p id="nl-ok" class="tbc" style="margin-top:10px;min-height:1.4em" aria-live="polite"></p></div></div>' +
+    return '<div class="wrap">' +
+      '<div class="fx-top"><div class="fx-lead"><p class="fx-k">Two webshops. One basket.</p><p class="fx-big">Plants and materials for an <em>Italian</em> home.</p></div>' +
+      '<div class="fx-news"><span class="fx-arch" aria-hidden="true">' + MARK + '</span><p>New arrivals and workshop dates, about once a month.</p><form class="nl-form" data-form="news" novalidate><label class="sr" for="nl-mail">Email address</label><input id="nl-mail" type="email" placeholder="Your email address" autocomplete="email"><button type="submit">Sign up ' + ARR + '</button></form><p id="nl-ok" class="tbc" aria-live="polite"></p></div></div>' +
       '<div class="ftr-top"><div><h4>Flora</h4><ul>' + l('flora') + '</ul></div><div><h4>Living</h4><ul>' + l('living') + '</ul></div>' +
-      '<div><h4>DaVinci</h4><ul><li><a href="#workshops">Workshops</a></li><li><a href="#projects">Projects</a></li><li><a href="#showroom">Showroom / Contact</a></li><li><a href="#showroom" data-intent="advice">Personal advice</a></li></ul></div>' +
-      '<div class="ftr-visit"><h4>Visit</h4><p>Showroom in Almere, the Netherlands</p><p class="tbc" style="margin:6px 0 14px">Opening expected December 2026, to be confirmed</p><a class="link" href="#showroom" data-intent="visit">Plan a visit</a></div></div>' +
-      '<div class="ftr-word" aria-hidden="true">DaVinci</div>' +
-      '<div class="ftr-bot"><span>&copy; 2026 DaVinci Flora &amp; Living</span><span>Delivery, returns, payment and privacy details to be confirmed before launch.</span></div></div>';
+      '<div><h4>DaVinci</h4><ul><li><a href="#workshops">Workshops</a></li><li><a href="#projects">Projects</a></li><li><a href="#showroom">Showroom &amp; contact</a></li><li><a href="#showroom" data-intent="advice">Personal advice</a></li></ul></div>' +
+      '<div class="ftr-visit"><h4>Visit</h4><p>Showroom in Almere, the Netherlands</p><p class="tbc">Opening expected December 2026, to be confirmed</p><a class="link" href="#showroom" data-intent="visit">Plan a visit</a></div></div></div>' +
+      '<div class="fx-word" aria-hidden="true"><span>Da</span><em>Vinci</em></div>' +
+      '<div class="wrap"><div class="ftr-bot"><span>&copy; 2026 DaVinci Flora &amp; Living</span><span>Delivery, returns, payment and privacy details to be confirmed before launch.</span></div></div>';
   }
-
   /* ---------- card ---------- */
   function card(p, i, o) {
     o = o || {};
-    return '<article class="card' + (o.enter ? ' enter' : '') + '" style="--i:' + i + (o.reveal ? ';--d:' + ((i % 4) * .09) + 's' : '') + '"' + (o.reveal ? ' data-reveal' : '') + '>' +
-      '<div class="cmedia">' + slot(p.art, 'zoom ar45', { photo: 'p-' + p.id + '-1', alt: p.name + ', ' + p.sub, sizes: '(max-width: 640px) 50vw, (max-width: 1100px) 33vw, 25vw', inner: p.badge ? '<span class="tag">' + p.badge + '</span>' : '' }) +
-      '<button class="btn sm full quick" data-add="' + p.id + '" aria-label="Add ' + esc(p.name) + ' to basket">Add to basket</button></div>' +
-      '<div>' + (o.tag ? '<span class="shoptag ' + p.shop + '">' + D.shops[p.shop].name + ' · ' + catName(p.shop, p.cat) + '</span>' : '') +
-      '<h3 class="nm"><a class="stretch" href="#product-' + p.id + '">' + p.name + '</a></h3><p class="sb">' + p.sub + '</p></div>' +
-      '<div class="row"><span class="price">' + fromTag(p) + eur(p.price) + '</span></div></article>';
+    return '<article class="pcard ' + p.shop + (o.enter ? ' enter' : '') + '" style="--i:' + i + (o.reveal ? ';--d:' + ((i % 4) * .09) + 's' : '') + '"' + (o.reveal ? ' data-reveal' : '') + '>' +
+      '<div class="pc-stage" data-tilt><span class="pc-back" aria-hidden="true"></span>' + prodMedia(p, 'pc-img', { sizes: '(max-width: 640px) 50vw, (max-width: 1100px) 33vw, 25vw', inner: p.badge ? '<span class="tag">' + p.badge + '</span>' : '' }) + '</div>' +
+      '<button class="pc-add" data-add="' + p.id + '" aria-label="Add ' + esc(p.name) + ' to basket"><span class="pl" aria-hidden="true">+</span> Add</button>' +
+      '<div class="pc-info">' + (o.tag ? '<span class="shoptag ' + p.shop + '">' + D.shops[p.shop].name + ' · ' + catName(p.shop, p.cat) + '</span>' : '') +
+      '<h3 class="nm"><a class="stretch" href="#product-' + p.id + '">' + p.name + '</a></h3><p class="sb">' + p.sub + '</p><span class="price">' + fromTag(p) + eur(p.price) + '</span></div></article>';
   }
-
   /* ---------- pages ---------- */
   const ARR_L = '<svg viewBox="0 0 22 12" aria-hidden="true"><path d="M0 6h21M16 1l5 5-5 5"/></svg>';
   const worldName = (w) => (w === 'both' ? 'Flora + Living' : D.shops[w].name);
@@ -172,69 +287,89 @@
   const items = (n) => n + (n === 1 ? ' item' : ' items');
   function homePage() {
     const feat = ['olive-leccino', 'paint-calce', 'lemon-meyer', 'tile-zellige', 'pot-impruneta', 'plaster-lime', 'agave', 'micro-kit'].map(byId);
-    const cats = (s) => '<ul class="catlist">' + D.shops[s].cats.map((c) => '<li><a href="#' + s + '-' + c[0] + '"><span>' + c[1] + '</span><small>' + items(catCount(s, c[0])) + '</small>' + ARR_L + '</a></li>').join('') + '</ul>';
-    const wsRows = D.workshops.slice(0, 4).map((w) => '<a class="wsrow" href="#workshops" data-reveal><span class="d">' + w.date.replace(/^\w+ /, '') + '</span><span class="t">' + w.title + '</span><span class="m">' + w.dur + ' · ' + eur(w.price) + '</span><span class="chipcell"><span class="chip ' + w.theme + '">' + worldName(w.theme) + '</span></span></a>').join('');
-    const feature = (shop) => {
-      const F = shop === 'flora';
-      return '<section class="sec ' + (F ? 'tone-ivory flora-c' : 'tone-cream living-c') + '"><div class="wrap feature' + (F ? '' : ' flip') + '">' +
-        '<div class="feature-media">' + slot(F ? { k: 'citrus', s: 31, big: 1 } : { k: 'swatch', s: 1 }, 'main zoom', { photo: F ? 'home-flora-feature' : 'home-living-feature', sizes: '(max-width: 960px) 100vw, 52vw', reveal: 1, par: .05 }) +
-        slot(F ? { k: 'olive', s: 12, w: ['#e8dcc0', '#cdb58c'] } : { k: 'plaster', s: 61, col: '#d4bc96' }, 'detail', { photo: F ? 'home-flora-detail' : 'home-living-detail', sizes: '260px', reveal: 1, d: .35, nolabel: 1 }) + '</div>' +
-        '<div class="copy"><p class="shopname" data-reveal>' + (F ? 'Flora webshop' : 'Living webshop') + '</p><h2 class="h2" data-split>' + sp(F ? 'Trees that grow into the place' : 'Surfaces with depth') + '</h2>' +
-        '<p class="lead" data-reveal>' + (F ? 'Olive and citrus, lavender and agave, in pots chosen to age well. Choose a plant, or a plant already paired with its pot.' : 'Mineral paint, lime plaster, zellige and microcement, with the tools to apply them. Start with a sample and see the colour in your own light.') + '</p>' +
-        cats(shop) + '<div data-reveal><a class="btn' + (F ? '' : ' clay') + '" href="#' + shop + '">Shop ' + (F ? 'Flora' : 'Living') + ' ' + ARR + '</a></div></div></div></section>';
-    };
     const P = D.projects;
-    const mini = (p) => '<a class="pj-mini" href="#projects" data-pj="' + p.id + '" data-reveal>' + slot(p.art, 'zoom', { photo: 'project-' + p.id, sizes: '(max-width: 960px) 50vw, 20vw' }) + '<div class="txt"><div class="meta"><span>' + worldName(p.world) + '</span></div><h3>' + p.title + '</h3><p>' + p.text + '</p><span class="link">View project</span></div></a>';
+    const FREP = { olive: 'olive-leccino', citrus: 'lemon-meyer', mediterranean: 'lavender-trio', pots: 'pot-impruneta', combos: 'combo-pair' };
+    const LREP = { paint: 'paint-samples', finishes: 'stucco-veneziano', tiles: 'tile-zellige', tools: 'tool-trowels', other: 'other-tray' };
     const steps = [['visit', '01', 'Visit the showroom', 'See colours, plasters and tiles in daylight. Our Almere showroom opens soon.', '#showroom'], ['advice', '02', 'Ask for advice', 'Not sure which tree, finish or colour? Ask, and get a considered answer.', '#showroom'], ['project', '03', 'Discuss a project', 'Planning a terrace, a room or a renovation? Talk it through with us.', '#showroom'], ['', '04', 'Join a workshop', 'Learn plant care, colour and plaster techniques, hands on.', '#workshops']];
-    return hero('home-hero', { k: 'courtyard', s: 41 }, { side: 'left', size: 'full', copy:
-        '<p class="kicker" data-reveal>Plants · Interiors · Workshops, Italian-inspired</p>' +
-        '<h1 class="h1" data-split>' + sp('Two webshops.<br> One <em>DaVinci.</em>') + '</h1>' +
-        '<p class="hero-sub" data-reveal style="--d:.6s">Olive trees and lime walls, terracotta and travertine. Shop plants or interior materials, add from both, and check out once.</p>' +
-        '<div class="phero-cta" data-reveal style="--d:.75s"><a class="btn ivory" href="#flora">Shop Flora ' + ARR + '</a><a class="btn light" href="#living">Shop Living ' + ARR + '</a></div>' }) +
+    const pin = (k, n, t, href) => '<a class="pin ' + k + '" data-k="' + k + '" href="' + href + '"><i class="pin-dot" aria-hidden="true"></i><span class="pin-c"><small>' + n + '</small><b>' + t + '</b></span>' + ARR + '</a>';
+    return '<section class="h4x">' + slot({ k: 'courtyard', s: 41 }, 'h4x-bg', { photo: 'home-hero2', eager: 1, sizes: '100vw', par: .05 }) + '<div class="h4x-shade" aria-hidden="true"></div>' +
+      '<div class="wrap h4x-in"><p class="kicker" data-reveal><span class="kdot" aria-hidden="true"></span>Plants · Interiors · Workshops · Almere</p>' +
+      '<h1 class="h4x-t"><span data-split>' + sp('From the garden') + '</span><span data-split style="--d:.25s">' + sp('to the <em>walls.</em>') + '</span></h1>' +
+      '<div class="h4x-foot"><div class="h4x-copy"><p class="h4x-sub" data-reveal style="--d:.55s">Olive trees and lime walls, terracotta and travertine. Shop plants or interior materials, add from both, and check out once.</p>' +
+      '<div class="hx-cta" data-reveal style="--d:.7s"><a class="btn ivory" href="#flora">Enter Flora ' + ARR + '</a><a class="btn clay" href="#living">Enter Living ' + ARR + '</a></div></div>' +
+      '<div class="h4x-cards" data-reveal style="--d:.85s"><a class="h4c flora" href="#flora">' + rend('olive-leccino', 'h4c-r') + '<span><small>01 · Flora webshop</small><b>Trees, plants &amp; pots</b></span>' + ARR + '</a>' +
+      '<a class="h4c living" href="#living">' + rend('tile-zellige', 'h4c-r') + '<span><small>02 · Living webshop</small><b>Paint, plaster &amp; tiles</b></span>' + ARR + '</a></div></div></div>' +
+      '<a class="h4x-scroll" href="#worlds" data-scroll="#worlds" aria-label="Scroll to the two worlds"><i aria-hidden="true"></i></a></section>' +
 
-      '<section class="choose-sec"><div class="wrap"><div class="choose-head"><p class="eyebrow" data-reveal>Choose your world</p><p class="h3" data-reveal style="--d:.1s">Plants or interiors, with workshops in between.</p></div><div class="choose">' +
-      '<a class="door flora" href="#flora" aria-label="Enter the Flora webshop">' + slot({ k: 'olive', s: 21, big: 1 }, 'zoom', { photo: 'home-door-flora', sizes: '(max-width: 640px) 50vw, 40vw', reveal: 1, d: .05, par: .05, inner: '<div class="shade"></div>' }) + '<div class="cap"><h2>Flora</h2><p>Olive and citrus trees, Mediterranean plants, pots and planters.</p><span class="go">Enter Flora webshop</span></div></a>' +
-      '<a class="bridge" href="#workshops" data-reveal style="--d:.5s"><span class="bridge-node">' + slot({ k: 'workshop', s: 14 }, 'zoom round', { photo: 'home-bridge', sizes: '190px' }) + '</span><h3>Workshops</h3><p>Where Flora and Living meet.</p><span class="link">Learn together</span></a>' +
-      '<a class="door living" href="#living" aria-label="Enter the Living webshop">' + slot({ k: 'interior', s: 12 }, 'zoom', { photo: 'home-door-living', sizes: '(max-width: 640px) 50vw, 40vw', reveal: 1, d: .2, par: .05, inner: '<div class="shade"></div>' }) + '<div class="cap"><h2>Living</h2><p>Paint, wall finishes, tiles, microcement and tools.</p><span class="go">Enter Living webshop</span></div></a>' +
+      /* preserved: the two worlds */
+      '<section class="worlds" id="worlds" aria-labelledby="worlds-h"><div class="wrap"><div class="worlds-head"><p class="eyebrow" data-reveal>Choose your world</p><h2 class="h2" id="worlds-h" data-split>' + sp('Two rooms, <em>one house</em>') + '</h2><p class="lead" data-reveal>A garden and a set of rooms, each with its own shop. One basket for both, and workshops where they meet.</p></div>' +
+      '<div class="wsplit">' +
+      '<div class="wd flora" data-reveal><svg class="wd-branch" viewBox="0 0 600 420" aria-hidden="true" focusable="false"><path class="br" d="M-20 380C120 330 230 290 330 210S500 70 640 40"/><path class="br" d="M250 262c-14-50-6-92 28-128M408 150c40-14 72-8 104 18"/>' +
+      [[90, 352, -20], [150, 330, 30], [200, 306, -40], [262, 268, 20], [300, 236, -30], [350, 196, 40], [400, 160, -20], [455, 126, 30], [510, 96, -30], [560, 70, 20], [262, 180, -70], [270, 150, 60], [450, 154, 10], [490, 160, -50]].map((l) => '<ellipse class="lf" cx="' + l[0] + '" cy="' + l[1] + '" rx="26" ry="7" transform="rotate(' + l[2] + ' ' + l[0] + ' ' + l[1] + ')"/>').join('') + '</svg>' +
+      '<div class="wd-in"><span class="wd-n">01 · The garden</span><h3><a class="stretch" href="#flora">Flora</a></h3><p>Olive and citrus trees, Mediterranean plants and terracotta, chosen for the sun and built to last.</p><ul class="wd-tags"><li>Olive</li><li>Citrus</li><li>Lavender</li><li>Terracotta</li></ul><span class="go">Enter the garden ' + ARR + '</span></div></div>' +
+      '<a class="wd-bridge" href="#workshops" data-reveal style="--d:.3s">' + slot({ k: 'workshop', s: 14 }, 'zoom round', { photo: 'home-bridge', sizes: '170px' }) + '<b>Workshops</b><small>Where they meet</small></a>' +
+      '<div class="wd living" data-reveal style="--d:.15s"><div class="wd-panels" aria-hidden="true"><i></i><i></i><i></i></div><div class="wd-chips" aria-hidden="true">' + D.colours.slice(0, 6).map((c) => '<i style="--c:' + c[1] + '"></i>').join('') + '</div>' +
+      '<div class="wd-in"><span class="wd-n">02 · The rooms</span><h3><a class="stretch" href="#living">Living</a></h3><p>Mineral paint, lime plaster, zellige and microcement, with the tools to apply them. Surfaces with depth.</p><ul class="wd-tags"><li>Paint</li><li>Plaster</li><li>Tiles</li><li>Microcement</li></ul><span class="go">Enter the rooms ' + ARR + '</span></div></div>' +
       '</div></div></section>' +
 
-      '<section class="sec tone-cream manifesto-sec"><div class="wrap"><div class="manifesto"><p class="big" data-lit>' + 'Olive groves and lime walls. Terracotta and travertine. DaVinci brings the plants and the materials of an Italian home under one roof, with the advice to use them well.'.split(' ').map((w) => '<span class="mw">' + w + '</span>').join(' ') + '</p></div></div></section>' +
+      /* the house in one photograph: the statement lights up as you scroll over it */
+      '<section class="story"><div class="story-pin">' + slot({ k: 'courtyard', s: 41 }, 'story-img', { photo: 'home-hero', sizes: '100vw', par: .05 }) + '<div class="story-shade" aria-hidden="true"></div></div>' +
+      '<div class="wrap story-in"><p class="kicker">The DaVinci house</p><p class="big" data-lit>' + 'Olive groves and lime walls. Terracotta and travertine. DaVinci brings the plants and the materials of an Italian home under one roof, with the advice to use them well.'.split(' ').map((w) => '<span class="mw">' + w + '</span>').join(' ') + '</p>' +
+      '<dl class="story-facts"><div><dt>Two</dt><dd>webshops, Flora and Living</dd></div><div><dt>One</dt><dd>basket and one checkout</dd></div><div><dt>Almere</dt><dd>showroom, opening expected December 2026 <span class="tbc">(to be confirmed)</span></dd></div></dl></div></section>' +
 
-      feature('flora') + feature('living') +
+      /* the garden */
+      '<section class="garden"><div class="garden-light" aria-hidden="true">' + leaves(23) + '</div><div class="wrap garden-in">' +
+      '<div class="garden-copy"><p class="shopname" data-reveal>01 · Flora webshop</p><h2 class="g-t" data-split>' + sp('Trees that grow into <em>the place</em>') + '</h2>' +
+      '<p class="lead" data-reveal>Olive and citrus, lavender and agave, in pots chosen to age well. Choose a plant, or a plant already paired with its pot.</p><div data-reveal><a class="btn ivory" href="#flora">Shop Flora ' + ARR + '</a></div></div>' +
+      '<div class="feature-media garden-media">' + slot({ k: 'citrus', s: 31, big: 1 }, 'main zoom', { photo: 'home-flora-feature', sizes: '(max-width: 960px) 100vw, 46vw', reveal: 1, par: .05 }) +
+      slot({ k: 'olive', s: 12, w: ['#e8dcc0', '#cdb58c'] }, 'detail', { photo: 'home-flora-detail', sizes: '260px', reveal: 1, d: .35, nolabel: 1 }) + '</div></div>' +
+      '<div class="wrap"><ul class="tags">' + D.shops.flora.cats.map((c, i) => '<li style="--i:' + i + '" data-reveal><a class="tag-c" href="#flora-' + c[0] + '"><i class="tag-hole" aria-hidden="true"></i><span class="tag-n">0' + (i + 1) + '</span>' + rend(FREP[c[0]], 'tag-r') + '<b>' + c[1] + '</b><span class="tag-d">' + c[2] + '</span><small>' + items(catCount('flora', c[0])) + '</small></a></li>').join('') + '</ul></div></section>' +
 
-      '<section class="sec tone-olive"><div class="wrap"><div class="ws-top"><div><p class="kicker" data-reveal>Workshops</p><h2 class="h2" data-split style="margin-top:14px">' + sp('Where Flora and Living meet') + '</h2></div><div style="display:grid;gap:24px"><p data-reveal>Learn to care for a tree, read a colour, trowel a wall. Workshops bring plants, styling and materials together in one room.</p><div data-reveal><a class="btn light" href="#workshops">All workshops ' + ARR + '</a></div></div></div><div class="wslist">' + wsRows + '</div><p class="note" style="margin-top:18px;color:var(--on-dark-muted);border-color:var(--on-dark-muted)" data-reveal>Example dates. The programme is confirmed before launch.</p></div></section>' +
+      /* the rooms */
+      '<section class="rooms3"><div class="wrap rooms3-in">' +
+      '<div class="feature-media rooms3-media living-c">' + slot({ k: 'swatch', s: 1 }, 'main zoom', { photo: 'home-living-feature', sizes: '(max-width: 960px) 100vw, 58vw', reveal: 1, par: .04 }) +
+      slot({ k: 'plaster', s: 61, col: '#d4bc96' }, 'detail', { photo: 'home-living-detail', sizes: '260px', reveal: 1, d: .35, nolabel: 1 }) + '</div>' +
+      '<div class="rooms3-copy"><p class="shopname" data-reveal>02 · Living webshop</p><h2 class="r-t" data-split>' + sp('Surfaces with depth') + '</h2><p class="lead" data-reveal>Mineral paint, lime plaster, zellige and microcement, with the tools to apply them. Start with a sample and see the colour in your own light.</p><div data-reveal><a class="btn clay" href="#living">Shop Living ' + ARR + '</a></div></div></div>' +
+      '<div class="wrap"><div class="boards">' + D.shops.living.cats.map((c, i) => '<a class="bd" href="#living-' + c[0] + '" data-reveal style="--d:' + (i * .07) + 's"><span class="bd-clip" aria-hidden="true"></span><span class="bd-n">0' + (i + 1) + '</span><span class="bd-img">' + rend(LREP[c[0]]) + '</span><b>' + c[1] + '</b><small>' + items(catCount('living', c[0])) + '</small></a>').join('') + '</div></div></section>' +
 
-      '<section class="sec tone-ivory"><div class="wrap"><div class="sechead"><div><span class="eyebrow">One basket for both</span><h2 class="h2" data-split>' + sp('From both shops') + '</h2></div><div class="sechead-links"><a class="link" href="#flora">Shop Flora</a><a class="link" href="#living">Shop Living</a></div></div><div class="pgrid">' + feat.map((p, i) => card(p, i, { reveal: 1, tag: 1 })).join('') + '</div></div></section>' +
+      /* the collection: a shelf from both shops */
+      '<section class="shelf-sec"><div class="wrap"><div class="shelf-head"><div><span class="eyebrow" data-reveal>One basket for both</span><h2 class="s-t" data-split>' + sp('From the garden <em>and</em> the rooms') + '</h2></div>' +
+      '<div class="shelf-nav"><button class="snav" data-shelf="-1" aria-label="Previous products">' + ARR + '</button><button class="snav" data-shelf="1" aria-label="Next products">' + ARR + '</button></div></div></div>' +
+      '<div class="shelf" id="shelf" tabindex="0" aria-label="Featured products from both shops">' + feat.map((p, i) => card(p, i, { reveal: 1, tag: 1 })).join('') + '</div>' +
+      '<div class="wrap shelf-foot"><a class="link" href="#flora">All of Flora</a><a class="link" href="#living">All of Living</a></div></section>' +
 
-      '<section class="sec tone-linen"><div class="wrap"><div class="sechead"><div><span class="eyebrow">Projects</span><h2 class="h2" data-split>' + sp('Rooms and gardens') + '</h2></div><div class="sechead-links"><a class="link" href="#projects">All projects</a></div></div>' +
-      '<div class="rooms"><a class="big" href="#projects" data-pj="' + P[0].id + '" data-reveal>' + slot(P[0].art, 'zoom', { photo: 'project-' + P[0].id, sizes: '(max-width: 960px) 100vw, 58vw' }) + '<div class="shade"></div><div class="pj-cap"><div class="meta"><span>' + worldName(P[0].world) + '</span><span>' + P[0].place + '</span></div><h3>' + P[0].title + '</h3><p>' + P[0].text + '</p></div></a>' +
-      '<div class="col">' + mini(P[1]) + mini(P[2]) + '</div></div></div></section>' +
+      /* the studio */
+      '<section class="studio"><div class="wrap studio-in"><div class="studio-head"><span class="eyebrow" data-reveal>Workshops · the studio</span><h2 class="w-t" data-split>' + sp('Where Flora and Living <em>meet</em>') + '</h2>' +
+      '<p class="lead" data-reveal>Learn to care for a tree, read a colour, trowel a wall. Workshops bring plants, styling and materials together in one room.</p><div data-reveal><a class="btn" href="#workshops">All workshops ' + ARR + '</a></div>' +
+      '<div class="studio-props" aria-hidden="true">' + rend('tool-trowels', 'sp1') + rend('lavender-trio', 'sp2') + rend('paint-samples', 'sp3') + '</div></div>' +
+      '<div class="tickets">' + D.workshops.slice(0, 4).map((w, i) => { const d = w.date.split(' '); return '<a class="tk ' + w.theme + '" href="#workshops" data-reveal style="--d:' + (i * .08) + 's"><span class="tk-stub"><small>' + d[0] + '</small><b>' + d[1] + '</b><span>' + d[2] + ' ' + d[3] + '</span></span><span class="tk-body"><span class="chip ' + w.theme + '">' + worldName(w.theme) + '</span><b>' + w.title + '</b><small>' + w.time + ' · ' + w.dur + ' · ' + eur(w.price) + '</small></span>' + ARR_L + '</a>'; }).join('') +
+      '<p class="note">Example dates. The programme is confirmed before launch.</p></div></div></section>' +
 
-      '<section class="sec tone-ivory"><div class="wrap"><div class="nextstep" data-reveal><div class="ns-intro"><div style="display:grid;gap:18px"><span class="eyebrow">Visit · Ask · Plan · Learn</span><h2 class="h2">Your next step</h2><p>Every room and garden starts with a conversation, in the showroom or online.</p></div>' +
-      slot({ k: 'interior', s: 77, w: ['#e5d4b4', '#c9ab7e'] }, 'zoom', { photo: 'home-nextstep', sizes: '(max-width: 960px) 100vw, 36vw' }) + '</div>' +
-      '<div class="ns-paths">' + steps.map((s) => '<a class="ns-path" href="' + s[4] + '"' + (s[0] ? ' data-intent="' + s[0] + '"' : '') + '><span class="n">' + s[1] + '</span><div><h3>' + s[2] + '</h3><p>' + s[3] + '</p></div>' + ARR_L + '</a>').join('') + '</div></div></div></section>';
+      /* projects: a gallery wall */
+      '<section class="gwall"><div class="wrap"><div class="gw-head"><span class="eyebrow" data-reveal>Projects</span><h2 class="gw-t" data-split>' + sp('Rooms and gardens') + '</h2><a class="link" href="#projects">All projects</a></div>' +
+      '<div class="gw">' + P.slice(0, 3).map((p, i) => '<a class="gw-f f' + (i + 1) + '" href="#projects" data-pj="' + p.id + '" data-reveal style="--d:' + (i * .1) + 's"><span class="gw-frame">' + slot(p.art, 'zoom', { photo: 'project-' + p.id, sizes: '(max-width: 960px) 100vw, 40vw' }) + '</span>' +
+        '<span class="gw-label"><small>0' + (i + 1) + ' · ' + worldName(p.world) + '</small><b>' + p.title + '</b><span>' + p.text + '</span></span></a>').join('') + '</div></div></section>' +
+
+      /* four ways in */
+      '<section class="ways"><div class="wrap"><div class="ways-head"><span class="eyebrow" data-reveal>Visit · Ask · Plan · Learn</span><h2 class="h2" data-split>' + sp('Your next step') + '</h2><p class="lead" data-reveal>Every room and garden starts with a conversation, in the showroom or online.</p></div>' +
+      '<div class="doors">' + steps.map((s, i) => '<a class="door2" href="' + s[4] + '"' + (s[0] ? ' data-intent="' + s[0] + '"' : '') + ' data-reveal style="--d:' + (i * .08) + 's"><span class="d2-n">' + s[1] + '</span><span class="d2-t">' + s[2] + '</span><span class="d2-p">' + s[3] + '</span>' + ARR + '</a>').join('') + '</div></div></section>';
   }
-
   let shopState = { shop: 'flora', cat: 'all', q: '' };
   function shopList() {
     const q = shopState.q.trim().toLowerCase();
     return D.products.filter((p) => p.shop === shopState.shop && (shopState.cat === 'all' || p.cat === shopState.cat) &&
       (!q || (p.name + ' ' + p.sub + ' ' + catName(p.shop, p.cat)).toLowerCase().includes(q)));
   }
-  /* Shop categories as an index band, so they read differently from the product grid below.
-     Flora: round images, olive. Living: square sample images, numbered, terracotta. */
+  /* Shop categories. Flora: arched glasshouse windows. Living: sample boards on a rail. */
   function shopIndex(shop) {
     const S = D.shops[shop], F = shop === 'flora';
     const total = D.products.filter((p) => p.shop === shop).length;
-    const rows = S.cats.map((c, i) => {
-      const p = D.products.find((x) => x.shop === shop && x.cat === c[0]);
-      return '<a class="fi-row" href="#' + shop + '-' + c[0] + '" data-reveal style="--d:' + (i * .05) + 's">' + slot(p.art, 'zoom fi-img', { photo: 'cat-' + shop + '-' + c[0], sizes: '120px' }) +
-        '<span class="fi-txt">' + (F ? '' : '<span class="fi-idx">0' + (i + 1) + '</span>') + '<span class="fi-nm">' + c[1] + '</span><span class="fi-desc">' + c[2] + '</span></span><span class="fi-cnt">' + items(catCount(shop, c[0])) + '</span>' + ARR_L + '</a>';
-    }).join('') +
-      '<a class="fi-row fi-all" href="#' + shop + '" data-scroll="#toolbar" data-reveal style="--d:.25s"><span class="fi-dot" aria-hidden="true">' + total + '</span><span class="fi-txt"><span class="fi-nm">All of ' + S.name + '</span><span class="fi-desc">' + (F ? 'Every tree, plant and pot in one view.' : 'Every paint, finish, tile and tool in one view.') + '</span></span><span class="fi-cnt">' + items(total) + '</span>' + ARR_L + '</a>';
-    return '<section class="shop-index"><div class="wrap fi-grid"><div class="fi-head"><span class="eyebrow" data-reveal>Shop by category</span><h2 class="h2" data-split>' + sp(F ? 'Grown for the sun' : 'Materials with a maker\'s hand') + '</h2>' +
-      '<p class="lead" data-reveal>' + (F ? 'Trees, plants, pots, or a plant already paired with its pot. Every plant is chosen to last on a terrace, in a courtyard or by a bright window.' : 'From the first colour sample to the trowel that applies it. Every material is chosen for depth, warmth and the way it changes with the light.') + '</p></div>' +
-      '<div class="fi-list">' + rows + '</div></div></section>';
+    const REP = F ? { olive: 'olive-vecchio', citrus: 'lemon-meyer', mediterranean: 'lavender-trio', pots: 'pot-impruneta', combos: 'combo-pair' } : { paint: 'paint-calce', finishes: 'plaster-lime', tiles: 'tile-zellige', tools: 'tool-trowels', other: 'other-tray' };
+    const head = '<div class="ci-head"><span class="eyebrow" data-reveal>Shop by category</span><h2 class="ci-t" data-split>' + sp(F ? 'Grown for <em>the sun</em>' : 'Materials with a <em>maker\'s hand</em>') + '</h2>' +
+      '<p class="lead" data-reveal>' + (F ? 'Trees, plants, pots, or a plant already paired with its pot. Every plant is chosen to last on a terrace, in a courtyard or by a bright window.' : 'From the first colour sample to the trowel that applies it. Every material is chosen for depth, warmth and the way it changes with the light.') + '</p></div>';
+    const tiles = S.cats.map((c, i) => '<a class="ci" href="#' + shop + '-' + c[0] + '" data-reveal style="--d:' + (i * .06) + 's"><span class="ci-win">' + rend(REP[c[0]]) + '</span><span class="ci-n">0' + (i + 1) + '</span><b>' + c[1] + '</b><span class="ci-d">' + c[2] + '</span><small>' + items(catCount(shop, c[0])) + '</small></a>').join('') +
+      '<a class="ci ci-all" href="#' + shop + '" data-scroll="#toolbar" data-reveal style="--d:.3s"><span class="ci-win"><span class="ci-num">' + total + '</span></span><span class="ci-n">All</span><b>All of ' + S.name + '</b><span class="ci-d">' + (F ? 'Every tree, plant and pot in one view.' : 'Every paint, finish, tile and tool in one view.') + '</span><small>' + items(total) + '</small></a>';
+    return '<section class="cidx ' + shop + '"><div class="wrap">' + head + '<div class="ci-row">' + tiles + '</div></div></section>';
   }
   /* a slow ribbon of words; it speeds up briefly while the page scrolls */
   function marquee(words) {
@@ -244,21 +379,27 @@
   function shopPage(shop, cat) {
     shopState = { shop, cat, q: '' };
     const S = D.shops[shop], isF = shop === 'flora';
-    const heroCopy = '<p class="crumb"><a href="#home">Home</a><span>/</span><span>' + S.name + ' webshop</span></p>' +
-      '<h1 class="h1 shop-h1" data-split>' + sp(S.name) + '</h1>' +
-      '<p class="hero-sub" data-reveal style="--d:.4s">' + (isF ? 'Olive and citrus trees, Mediterranean plants and terracotta, chosen for the sun and built to last.' : 'Mineral paint, lime plaster, tiles and microcement, with the tools to apply them. Surfaces with depth.') + '</p>' +
-      '<div class="phero-cta" data-reveal style="--d:.55s">' + (isF ? '<a class="btn ivory" href="#flora-olive">Shop olive trees ' + ARR + '</a>' : '<a class="btn ivory" href="#product-paint-samples">Order colour samples ' + ARR + '</a>') + '<button class="btn light" data-scroll="#toolbar">See the full range</button></div>';
     const band = isF
-      ? '<section class="sec tone-cream"><div class="wrap care">' + slot({ k: 'olive', s: 77, pot: '#9a4a2a' }, 'zoom', { photo: 'flora-care', sizes: '(max-width: 960px) 100vw, 36vw', reveal: 1 }) +
-        '<div class="copy"><span class="eyebrow" data-reveal>Seasonal care</span><h2 class="h2" data-split>' + sp('Winter care for olive and citrus') + '</h2><p class="lead" data-reveal>Most olives cope with light frost in a sheltered spot. Citrus prefer a bright, cool and frost-free room. Water sparingly until spring, and keep pots off cold stone.</p>' +
-        '<div class="ch-actions" data-reveal><a class="btn" href="#workshops">Join the care workshop ' + ARR + '</a><a class="link" href="#showroom" data-intent="advice">Ask for plant advice</a></div></div></div></section>'
-      : '<section class="sec tone-linen"><div class="wrap"><div class="library-head"><div><span class="eyebrow" data-reveal>Colour library</span><h2 class="h2" data-split style="margin-top:14px">' + sp('Earth tones, in your own light') + '</h2></div><div style="display:grid;gap:22px"><p class="lead" data-reveal>Eight example tones across our paints and plasters. Colour changes with daylight, so order samples and paint them on your own wall before you choose.</p><div data-reveal><a class="btn clay" href="#product-paint-samples">Order colour samples ' + ARR + '</a></div></div></div>' +
-        '<div class="swatches">' + D.colours.map((c, i) => '<a class="swatch" href="#product-paint-samples" data-reveal style="--d:' + (i * .05) + 's;--c:' + c[1] + '"><i></i><b>' + c[0] + '</b><small>Example tone</small></a>').join('') + '</div></div></section>';
-    return '<div class="shop-' + shop + '">' + hero(shop + '-hero', isF ? { k: 'grove', s: 17 } : { k: 'plasterroom', s: 23 }, { side: isF ? 'left' : 'right', size: 'shop', copy: heroCopy }) +
+      ? '<section class="care3"><div class="garden-light" aria-hidden="true">' + leaves(41) + '</div><div class="wrap care3-in"><div class="care3-head"><span class="eyebrow" data-reveal>Seasonal care</span><h2 class="g-t" data-split>' + sp('Winter care for <em>olive and citrus</em>') + '</h2>' +
+        '<div class="ch-actions" data-reveal><a class="btn ivory" href="#workshops">Join the care workshop ' + ARR + '</a><a class="link" href="#showroom" data-intent="advice">Ask for plant advice</a></div></div>' +
+        '<ol class="care3-list">' + [['Olive', 'Most olives cope with light frost in a sheltered spot.', 'olive-frantoio'], ['Citrus', 'Citrus prefer a bright, cool and frost-free room.', 'bergamot'], ['Until spring', 'Water sparingly, and keep pots off cold stone.', 'pot-impruneta']].map((x, i) => '<li data-reveal style="--d:' + (i * .1) + 's">' + rend(x[2], 'care3-r') + '<span class="n">0' + (i + 1) + '</span><b>' + x[0] + '</b><p>' + x[1] + '</p></li>').join('') + '</ol></div></section>'
+      : '<section class="lib3"><div class="wrap"><div class="lib3-head"><div><span class="eyebrow" data-reveal>Colour library</span><h2 class="r-t" data-split>' + sp('Earth tones, in your own light') + '</h2></div><div class="lib3-side"><p class="lead" data-reveal>Eight example tones across our paints and plasters. Colour changes with daylight, so order samples and paint them on your own wall before you choose.</p><div data-reveal><a class="btn clay" href="#product-paint-samples">Order colour samples ' + ARR + '</a></div></div></div>' +
+        '<div class="strips">' + D.colours.map((c, i) => '<a class="strip" href="#product-paint-samples" data-reveal style="--d:' + (i * .05) + 's;--c:' + c[1] + '"><i></i><span><b>' + c[0] + '</b><small>Example tone</small></span></a>').join('') + '</div></div></section>';
+    const fp = byId(isF ? 'olive-leccino' : 'stucco-veneziano'), total = D.products.filter((x) => x.shop === shop).length;
+    const sx = '<section class="sx sx-' + shop + '" data-scene>' +
+      slot(isF ? { k: 'grove', s: 17 } : { k: 'plasterroom', s: 23 }, 'sx-bg', { photo: shop + '-hero', eager: 1, sizes: '100vw', par: .06 }) + '<div class="sx-shade" aria-hidden="true"></div>' + (isF ? leaves(5) : '<div class="sx-rake" aria-hidden="true"></div>') +
+      '<div class="wrap sx-top"><p class="crumb"><a href="#home">Home</a><span>/</span><span>' + S.name + ' webshop</span></p><span class="sx-k">' + (isF ? '01 · The garden' : '02 · The rooms') + '</span></div>' +
+      '<h1 class="sx-word" data-depth="-.25" data-split>' + sp(S.name) + '</h1>' +
+      '<a class="sx-chip c1" href="#product-' + fp.id + '" data-depth="1.1"><small>Featured · example</small><b>' + fp.name + '</b><span class="price">' + fromTag(fp) + eur(fp.price) + '</span></a>' +
+      '<button class="sx-chip c2" data-scroll="#toolbar" data-depth="1.4"><small>' + (isF ? 'Trees, plants, pots' : 'Paint, plaster, tiles, tools') + '</small><b>' + total + ' products</b><span>See the range</span></button>' +
+      '<div class="wrap sx-copy"><p class="hero-sub" data-reveal style="--d:.4s">' + (isF ? 'Olive and citrus trees, Mediterranean plants and terracotta, chosen for the sun and built to last.' : 'Mineral paint, lime plaster, tiles and microcement, with the tools to apply them. Surfaces with depth.') + '</p>' +
+      '<div class="phero-cta" data-reveal style="--d:.55s">' + (isF ? '<a class="btn ivory" href="#flora-olive">Shop olive trees ' + ARR + '</a>' : '<a class="btn ivory" href="#product-paint-samples">Order colour samples ' + ARR + '</a>') + '<button class="btn light" data-scroll="#toolbar">See the full range</button></div>' +
+      '</div></section>';
+    return '<div class="shop-' + shop + '">' + sx +
       shopIndex(shop) +
       '<div class="toolbar" id="toolbar"><div class="wrap toolbar-in"><div class="pills" id="pills" role="navigation" aria-label="Categories">' + pills() + '</div>' +
       '<label class="field">' + ICON_S + '<span class="sr">Search ' + S.name + '</span><input id="shopq" type="search" placeholder="Search ' + S.name + '" autocomplete="off"></label></div></div>' +
-      '<div class="wrap shopgrid"><p id="shopcount" class="shopcount" aria-live="polite"></p><div class="pgrid" id="sgrid"></div><p class="note" style="margin-top:48px">Prototype products and placeholder prices. The real assortment, photography, stock and delivery details are confirmed before launch.</p></div>' +
+      '<div class="wrap shopgrid"><p id="shopcount" class="shopcount" aria-live="polite"></p><div class="pgrid" id="sgrid"></div><p class="note" style="margin-top:48px">Prototype products and placeholder prices. Product images are illustrative 3D renders; the real assortment, photography, stock and delivery details are confirmed before launch.</p></div>' +
       band + '</div>';
   }
   function pills() {
@@ -277,92 +418,102 @@
     const p = byId(id); if (!p) return homePage();
     Object.assign(pdp, { id, sel: (p.variants || []).map(() => 0), qty: 1, view: 0 });
     const S = D.shops[p.shop];
-    /* Gallery: shot 1 packshot, 2 detail, 3 in place. Ready photos are shown; with none, three crops of the illustration. */
+    /* Gallery: real photos when listed as ready (packshot, detail, in place); otherwise the studio render, with a live 3D view on request. */
     const SHOTS = ['', 'detail', 'in place'];
     const real = [1, 2, 3].map((n) => 'p-' + p.id + '-' + n).filter(isReady);
     real.forEach((k) => { artFor[k] = p.art; });
-    const views = real.length ? real.map((k, i) => ({ k, alt: p.name + (SHOTS[i] ? ', ' + SHOTS[i] : '') })) : VIEWS.map((v) => ({ v }));
-    const inner = (x, thumb) => x.k ? '<div class="zl">' + pic(x.k, { alt: x.alt, sizes: thumb ? '90px' : '(max-width: 960px) 100vw, 55vw' }) + '</div>' : '<div class="zl" style="--s:' + x.v[0] + ';--o:' + x.v[1] + '">' + window.DV_ART(p.art) + '</div>';
-    const layers = views.map((x, i) => '<div class="layer' + (i === 0 ? ' on' : '') + '" data-layer="' + i + '">' + inner(x) + '</div>').join('') + (real.length ? '' : labelFor('p-' + p.id + '-1'));
-    const thumbs = views.length > 1 ? views.map((x, i) => '<button class="thumb" data-view="' + i + '" aria-label="Image ' + (i + 1) + ' of ' + views.length + '"' + (i === 0 ? ' aria-current="true"' : '') + '>' + inner(x, 1) + '</button>').join('') : '';
-    const related = D.products.filter((x) => x.shop === p.shop && x.id !== p.id).slice(0, 4);
-    return '<div class="wrap"><p class="crumb" style="padding-top:32px"><a href="#home">Home</a><span>/</span><a href="#' + p.shop + '">' + S.name + '</a><span>/</span><a href="#' + p.shop + '-' + p.cat + '">' + catName(p.shop, p.cat) + '</a></p>' +
-      '<div class="pdp"><div class="gal' + (thumbs ? '' : ' single') + '" data-reveal><div class="thumbs">' + thumbs + '</div><div class="stage" id="stage" data-zoom>' + layers + '</div></div>' +
-      '<div class="pinfo" data-reveal style="--d:.15s"><div><span class="shoptag ' + p.shop + '">' + S.name + ' webshop' + (p.badge ? ' · ' + p.badge : '') + '</span><h1 style="margin-top:12px">' + p.name + '</h1><p class="sub" style="margin-top:8px">' + p.sub + '</p></div>' +
-      '<div class="big-price" id="pprice">' + eur(unit(p, pdp.sel)) + '</div><p style="color:var(--muted);max-width:52ch">' + p.desc + '</p>' +
-      (p.variants || []).map((v, gi) => '<div class="vgrp"><div class="lbl">' + v.label + '<span id="vsel' + gi + '">' + v.opts[0][0] + '</span></div><div class="opts" role="radiogroup" aria-label="' + v.label + '">' + v.opts.map((o, oi) => '<button class="opt" role="radio" aria-checked="' + (oi === 0) + '" data-opt="' + gi + ':' + oi + '">' + o[0] + (o[1] ? ' <span style="opacity:.6">+' + eur(o[1]) + '</span>' : '') + '</button>').join('') + '</div></div>').join('') +
+    let views;
+    if (real.length) views = real.map((k, i) => ({ html: '<div class="zl">' + pic(k, { alt: p.name + (SHOTS[i] ? ', ' + SHOTS[i] : ''), sizes: '(max-width: 960px) 100vw, 55vw' }) + '</div>', th: '<div class="zl">' + pic(k, { alt: '', sizes: '90px' }) + '</div>' }));
+    else if (P3D[p.id]) views = [{ html: '<div class="zl"><img class="pd-rend" src="img/3d-p-' + p.id + '.webp" alt="' + esc(p.name) + ', illustrative 3D render"></div><span class="phlabel"><span>3D render</span><span class="l2"> · photo to come</span></span>', th: '<div class="zl"><img class="pd-rend" src="img/3d-p-' + p.id + '.webp" alt=""></div>' }];
+    else views = VIEWS.map((v) => ({ html: '<div class="zl" style="--s:' + v[0] + ';--o:' + v[1] + '">' + window.DV_ART(p.art) + '</div>' + labelFor('p-' + p.id + '-1'), th: '<div class="zl" style="--s:' + v[0] + ';--o:' + v[1] + '">' + window.DV_ART(p.art) + '</div>' }));
+    const has3d = GL_OK && P3D[p.id];
+    const layers = views.map((x, i) => '<div class="layer' + (i === 0 ? ' on' : '') + '" data-layer="' + i + '">' + x.html + '</div>').join('');
+    const thumbs = views.length > 1 ? views.map((x, i) => '<button class="thumb" data-view="' + i + '" aria-label="Image ' + (i + 1) + ' of ' + views.length + '"' + (i === 0 ? ' aria-current="true"' : '') + '>' + x.th + '</button>').join('') : '';
+    const related = D.products.filter((x) => x.shop === p.shop && x.id !== p.id).slice(0, 6);
+    return '<div class="pd-page ' + p.shop + '"><div class="wrap"><p class="crumb"><a href="#home">Home</a><span>/</span><a href="#' + p.shop + '">' + S.name + '</a><span>/</span><a href="#' + p.shop + '-' + p.cat + '">' + catName(p.shop, p.cat) + '</a></p>' +
+      '<div class="pdp pd"><div class="pd-media" data-reveal>' +
+      '<div class="stage pd-stage" id="stage" data-zoom><span class="pd-back" aria-hidden="true"></span>' + layers + '</div>' +
+      (has3d ? '<div class="g3 pd-gl" id="pd3d" data-g3="product" data-lazy3d data-drag="1" data-g3o=\'' + JSON.stringify({ id: p.id, aspect: .8, shadow: .26, pad: 1.5 }) + '\' hidden><span class="g3-hint">Drag to turn · illustrative 3D render</span></div>' : '') +
+      '<div class="pd-bar">' + (thumbs ? '<div class="thumbs">' + thumbs + '</div>' : '<span></span>') + (has3d ? '<button class="pd-3d" data-3d aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span>View in 3D</span></button>' : '') + '</div></div>' +
+      '<div class="pinfo pd-info" data-reveal style="--d:.15s"><div><span class="shoptag ' + p.shop + '">' + S.name + ' webshop' + (p.badge ? ' · ' + p.badge : '') + '</span><h1>' + p.name + '</h1><p class="sub">' + p.sub + '</p></div>' +
+      '<div class="pd-pricebar"><div class="big-price" id="pprice">' + eur(unit(p, pdp.sel)) + '</div><span class="pd-vat">Placeholder price</span></div><p class="pd-desc">' + p.desc + '</p>' +
+      (p.variants || []).map((v, gi) => '<div class="vgrp"><div class="lbl">' + v.label + '<span id="vsel' + gi + '">' + v.opts[0][0] + '</span></div><div class="opts" role="radiogroup" aria-label="' + v.label + '">' + v.opts.map((o, oi) => '<button class="opt" role="radio" aria-checked="' + (oi === 0) + '" data-opt="' + gi + ':' + oi + '">' + o[0] + (o[1] ? ' <span class="opt-x">+' + eur(o[1]) + '</span>' : '') + '</button>').join('') + '</div></div>').join('') +
       '<div class="qtyrow"><div class="qty"><button data-pq="-1" aria-label="Fewer">&minus;</button><output id="pqty" aria-live="polite">1</output><button data-pq="1" aria-label="More">+</button></div><button class="btn full" id="padd" data-pdp-add>Add to basket</button></div>' +
+      '<ul class="pd-assure"><li>One basket for Flora and Living</li><li>Advice in the showroom or online</li><li>Delivery details confirmed before launch</li></ul>' +
       '<p class="note">Prototype product with a placeholder price. Availability is confirmed before launch.</p>' +
-      '<div class="acc"><details open><summary>Details</summary><div class="body">' + p.desc + '</div></details><details><summary>Delivery and returns</summary><div class="body">Delivery options, costs and the returns policy will be confirmed before launch.</div></details><details><summary>' + (p.shop === 'flora' ? 'Care' : 'Application') + '</summary><div class="body">' + (p.shop === 'flora' ? 'Care guidance for this plant is added once the assortment is confirmed. Join a workshop for hands-on advice.' : 'Application guidance for this product is added once the assortment is confirmed. Our workshops cover technique step by step.') + '</div></details></div></div></div>' +
-      '<div class="sechead" style="margin-top:20px"><h2 class="h2" style="font-size:clamp(34px,4vw,56px)" data-split>' + sp('More from ' + S.name) + '</h2><a class="link" href="#' + p.shop + '">Shop all</a></div><div class="pgrid" style="padding-bottom:clamp(64px,9vw,120px)">' + related.map((r, i) => card(r, i, { reveal: 1 })).join('') + '</div></div>';
+      '<div class="acc"><details open><summary>Details</summary><div class="body">' + p.desc + '</div></details><details><summary>Delivery and returns</summary><div class="body">Delivery options, costs and the returns policy will be confirmed before launch.</div></details><details><summary>' + (p.shop === 'flora' ? 'Care' : 'Application') + '</summary><div class="body">' + (p.shop === 'flora' ? 'Care guidance for this plant is added once the assortment is confirmed. Join a workshop for hands-on advice.' : 'Application guidance for this product is added once the assortment is confirmed. Our workshops cover technique step by step.') + '</div></details></div></div></div></div>' +
+      '<section class="pd-more"><div class="wrap shelf-head"><div><span class="eyebrow">More from ' + S.name + '</span><h2 class="s-t" data-split>' + sp(p.shop === 'flora' ? 'From the <em>same garden</em>' : 'From the <em>same rooms</em>') + '</h2></div><a class="link" href="#' + p.shop + '">Shop all</a></div>' +
+      '<div class="shelf">' + related.map((r, i) => card(r, i, { reveal: 1 })).join('') + '</div></section></div>';
   }
-
   let wsFilter = 'all';
   function workshopsPage() {
     const W = D.workshops;
-    return '<div class="ws-page">' + hero('workshops-hero', { k: 'worktable', s: 29 }, { side: 'left', size: 'shop', copy:
-        '<p class="crumb"><a href="#home">Home</a><span>/</span><span>Workshops</span></p><h1 class="h1 shop-h1" data-split>' + sp('Workshops') + '</h1>' +
-        '<p class="hero-sub" data-reveal style="--d:.4s">Where Flora and Living meet. Learn about plants, styling, colour, materials and decorative techniques, hands on, in small groups.</p>' +
-        '<div class="phero-cta" data-reveal style="--d:.55s"><button class="btn ivory" data-scroll="#wsf">See the dates ' + ARR + '</button></div>' }) +
-      '<div class="wrap" style="padding-top:clamp(48px,6vw,88px)">' +
-      '<div class="ws-bar" id="wsf"><div class="pills" role="group" aria-label="Filter workshops">' + [['all', 'All'], ['flora', 'Flora'], ['living', 'Living'], ['both', 'Flora + Living']].map((f) => '<button class="pill" data-wsf="' + f[0] + '" aria-pressed="' + (wsFilter === f[0]) + '">' + f[1] + ' <span class="pc">' + (f[0] === 'all' ? W.length : W.filter((w) => w.theme === f[0]).length) + '</span></button>').join('') + '</div><p class="ws-count" id="wscount"></p></div>' +
+    const board = W.slice(0, 3).map((w, i) => { const d = w.date.split(' '); return '<a class="pn ' + w.theme + '" href="#wsf" data-scroll="#ws-' + w.id + '" style="--r:' + [-3, 2, -1.5][i] + 'deg"><span class="pn-pin" aria-hidden="true"></span><small>' + d[0] + ' ' + d[1] + ' ' + d[2] + '</small><b>' + w.title + '</b><span>' + w.dur + ' · ' + eur(w.price) + '</span></a>'; }).join('');
+    return '<div class="ws-page"><section class="wsx" data-scene>' +
+      '<div class="wrap wsx-in"><div class="wsx-copy"><p class="crumb"><a href="#home">Home</a><span>/</span><span>Workshops</span></p>' +
+      '<h1 class="wsx-t" data-split>' + sp('Learn it <em>by hand</em>') + '</h1>' +
+      '<p class="hero-sub" data-reveal style="--d:.4s">Where Flora and Living meet. Learn about plants, styling, colour, materials and decorative techniques, hands on, in small groups.</p>' +
+      '<div class="phero-cta" data-reveal style="--d:.55s"><button class="btn" data-scroll="#wsf">See the dates ' + ARR + '</button><a class="btn ghost" href="#showroom" data-intent="question">Ask a question</a></div>' +
+      '<dl class="wsx-facts" data-reveal style="--d:.7s"><div><dt>' + W.length + '</dt><dd>example workshops</dd></div><div><dt>6 to 12</dt><dd>places per group</dd></div><div><dt>2 to 7 h</dt><dd>per session</dd></div></dl></div>' +
+      '<div class="wsx-stage"><div class="wsx-arch" data-depth="-.25">' + slot({ k: 'worktable', s: 29 }, '', { photo: 'workshops-hero', eager: 1, reveal: 1, sizes: '(max-width: 960px) 90vw, 40vw' }) + '</div>' +
+      '<div class="wsx-board" data-depth=".7"><span class="eyebrow">Next on the table</span>' + board + '</div>' +
+      rend('tool-trowels', 'wsx-p p1') + rend('lavender-trio', 'wsx-p p2') + rend('paint-samples', 'wsx-p p3') + '</div></div></section>' +
+      '<section class="wsl"><div class="wrap"><div class="ws-bar" id="wsf"><div><span class="eyebrow">The programme</span><h2 class="s-t">Choose a <em>workshop</em></h2></div><div class="seg2" role="group" aria-label="Filter workshops">' + [['all', 'All'], ['flora', 'Flora'], ['living', 'Living'], ['both', 'Flora + Living']].map((f) => '<button class="pill" data-wsf="' + f[0] + '" aria-pressed="' + (wsFilter === f[0]) + '">' + f[1] + ' <span class="pc">' + (f[0] === 'all' ? W.length : W.filter((w) => w.theme === f[0]).length) + '</span></button>').join('') + '</div></div>' +
       '<div class="wlist" id="wslist">' + wsRows() + '</div>' +
-      '<p class="note" style="margin-bottom:clamp(56px,7vw,104px)">Example workshops. Dates, duration, pricing and booking details are updated as the programme develops.</p></div></div>';
+      '<p class="note" style="margin-top:36px">Example workshops. Dates, duration, pricing and booking details are updated as the programme develops.</p></div></section></div>';
   }
   function wsRows() {
     const list = D.workshops.filter((w) => wsFilter === 'all' || w.theme === wsFilter);
     const label = (t) => (t === 'both' ? 'Flora + Living' : D.shops[t].name);
     return list.map((w, i) => { const d = w.date.split(' ');
-      return '<article class="wcard">' + slot(w.art, 'zoom', { photo: 'workshop-' + w.id, sizes: '(max-width: 960px) 100vw, 42vw', reveal: 1, par: .04,
-          inner: '<span class="wdate"><b>' + d[1] + '</b><small>' + d[2] + ' ' + d[3] + '</small></span>' }) +
-        '<div class="wtext" data-reveal style="--d:.15s"><div class="wtop"><span class="wnum">0' + (i + 1) + '</span><span class="chip ' + w.theme + '">' + label(w.theme) + '</span></div>' +
-        '<h3>' + w.title + '</h3><p class="wblurb">' + w.blurb + '</p>' +
-        '<dl class="wmeta"><div><dt>Date</dt><dd>' + w.date + '</dd></div><div><dt>Time</dt><dd>' + w.time + '</dd></div><div><dt>Duration</dt><dd>' + w.dur + '</dd></div><div><dt>Price</dt><dd class="tnum">' + eur(w.price) + ' per person</dd></div><div><dt>Group</dt><dd>' + w.spots + ' places</dd></div></dl>' +
-        '<button class="btn" data-book="' + w.id + '">Book a place ' + ARR + '</button></div></article>'; }).join('');
+      return '<article class="wt ' + w.theme + '" id="ws-' + w.id + '" style="--i:' + i + '">' +
+        '<div class="wt-stub"><small>' + d[0] + '</small><b>' + d[1] + '</b><span>' + d[2] + ' ' + d[3] + '</span><i class="wt-time">' + w.time + '</i></div>' +
+        '<div class="wt-body"><div class="wtop"><span class="wnum">0' + (i + 1) + '</span><span class="chip ' + w.theme + '">' + label(w.theme) + '</span></div><h3>' + w.title + '</h3><p class="wblurb">' + w.blurb + '</p>' +
+        '<dl class="wmeta"><div><dt>Date</dt><dd>' + w.date + '</dd></div><div><dt>Duration</dt><dd>' + w.dur + '</dd></div><div><dt>Group</dt><dd>' + w.spots + ' places</dd></div></dl></div>' +
+        slot(w.art, 'wt-img zoom', { photo: 'workshop-' + w.id, sizes: '(max-width: 960px) 100vw, 26vw' }) +
+        '<div class="wt-buy"><span class="price">' + eur(w.price) + '</span><small>per person</small><button class="btn" data-book="' + w.id + '">Book a place ' + ARR + '</button></div></article>'; }).join('');
   }
   function projectsPage() {
     const P = D.projects;
-    const mats = (p) => '<div class="ch-items"><span class="eyebrow">Plants and materials</span>' + p.items.map((it) => { const x = byId(it[1]); return '<a href="#product-' + it[1] + '">' + it[0] + '<span>' + (x ? D.shops[x.shop].name : '') + '</span></a>'; }).join('') + '</div>';
+    const mats = (p) => '<div class="ch-items spec"><span class="eyebrow">Plants and materials</span>' + p.items.map((it) => { const x = byId(it[1]); return '<a href="#product-' + it[1] + '">' + (x && P3D[x.id] ? rend(x.id, 'spec-r') : '') + '<b>' + it[0] + '</b><span>' + (x ? D.shops[x.shop].name : '') + '</span>' + ARR_L + '</a>'; }).join('') + '</div>';
     const meta = (p) => '<div class="meta"><span class="chip ' + p.world + '">' + worldName(p.world) + '</span><span>' + p.type + '</span><span>' + p.place + '</span></div>';
     const cta = '<div class="ch-actions"><a class="btn sm" href="#showroom" data-intent="project">Discuss a project like this ' + ARR + '</a></div>';
-    const head = (p, i) => '<div class="ch-head" data-reveal><span class="num">0' + (i + 1) + '</span><span>' + p.type + '</span></div>';
+    const title = (p, i) => '<header class="sp-head" data-reveal><span class="sp-num">0' + (i + 1) + '</span><div>' + meta(p) + '<h2 class="sp-t">' + p.title + '</h2></div></header>';
     const img = (p, cls, o) => slot(o && o.b ? p.artB : p.art, cls, Object.assign({ photo: 'project-' + p.id + (o && o.b ? '-b' : ''), alt: o && o.b ? (PH.slots['project-' + p.id + '-b'] || {}).alt : p.title }, o || {}));
-    const index = '<nav class="pj-index" aria-label="Projects on this page" data-reveal style="--d:.6s"><span class="eyebrow">In this portfolio</span>' +
+    const index = '<nav class="pj-index" aria-label="Projects on this page" data-reveal style="--d:.6s">' +
       P.map((p, i) => '<a href="#projects" data-scroll="#pj-' + p.id + '"><span>0' + (i + 1) + '</span><b>' + p.title + '</b><small>' + worldName(p.world) + '</small></a>').join('') + '</nav>';
     const [a, b, c, d] = P;
-    return hero('projects-hero', { k: 'loggia', s: 53 }, { side: 'split', size: 'tall', cls: 'bottom', aside: index, copy:
-        '<p class="crumb"><a href="#home">Home</a><span>/</span><span>Projects</span></p>' +
-        '<h1 class="h1" data-split>' + sp('Rooms, gardens<br> &amp; <em>terraces</em>') + '</h1>' +
-        '<p class="hero-sub" data-reveal style="--d:.5s">Spaces where plants and materials were chosen together. These are example projects, shown to illustrate the approach; DaVinci\'s own work follows.</p>' }) +
+    return '<section class="pjx"><div class="pjx-img">' + slot({ k: 'loggia', s: 53 }, '', { photo: 'projects-hero', eager: 1, reveal: 1, sizes: '100vw', par: .06 }) + '<div class="pjx-shade" aria-hidden="true"></div></div>' +
+      '<div class="wrap pjx-in"><p class="crumb"><a href="#home">Home</a><span>/</span><span>Projects</span></p>' +
+      '<h1 class="pjx-t" data-split>' + sp('Rooms, gardens<br> &amp; <em>terraces</em>') + '</h1>' +
+      '<p class="hero-sub" data-reveal style="--d:.5s">Spaces where plants and materials were chosen together. These are example projects, shown to illustrate the approach; DaVinci\'s own work follows.</p>' + index + '</div></section>' +
 
-      '<section class="sec-sm tone-ivory"><div class="wrap pj-intro"><p class="statement" data-reveal>Plants and materials, designed together: the olive chosen for the plaster behind it, the tile for the pot that stands on it.</p>' +
+      '<section class="pj-intro3"><div class="wrap"><p class="statement" data-reveal>Plants and materials, designed together: the olive chosen for the plaster behind it, the tile for the pot that stands on it.</p>' +
       '<div class="side" data-reveal style="--d:.15s"><p class="lead">Each project lists the plants and materials it uses, linked to the shop, so you can start from the result you like.</p><div class="legend"><span class="chip flora">Flora</span><span class="chip living">Living</span><span class="chip both">Flora + Living</span></div></div></div></section>' +
 
-      '<section class="sec-sm tone-ivory chapter ch-a" id="pj-' + a.id + '" style="padding-top:0"><div class="wrap">' + head(a, 0) +
-      img(a, 'stage-wide zoom', { sizes: '100vw', reveal: 1, par: .05 }) +
-      '<div class="ch-body"><div class="ch-copy" data-reveal>' + meta(a) + '<h2>' + a.title + '</h2><p class="lead">' + a.long + '</p></div>' +
-      '<div class="ch-copy" data-reveal style="--d:.1s">' + mats(a) + cta + '</div>' + img(a, 'zoom', { b: 1, sizes: '25vw', reveal: 1, d: .2 }) + '</div></div></section>' +
+      '<section class="spread sp-a chapter ch-a" id="pj-' + a.id + '"><div class="wrap">' + title(a, 0) +
+      '<div class="sp-a-grid"><div class="sp-a-media">' + img(a, 'sp-wide zoom', { sizes: '(max-width: 960px) 100vw, 64vw', reveal: 1, par: .05 }) + img(a, 'sp-detail', { b: 1, sizes: '22vw', reveal: 1, d: .2, nolabel: 1 }) + '</div>' +
+      '<div class="sp-side" data-reveal style="--d:.1s"><p class="lead">' + a.long + '</p>' + mats(a) + cta + '</div></div></div></section>' +
 
-      '<section class="sec tone-linen chapter ch-b" id="pj-' + b.id + '"><div class="wrap">' + head(b, 1) +
+      '<section class="spread sp-b chapter ch-b" id="pj-' + b.id + '"><div class="wrap">' + title(b, 1) +
       '<div class="ch-grid2"><div class="media">' + img(b, 'm1 zoom', { sizes: '(max-width: 960px) 100vw, 55vw', reveal: 1, par: .05 }) + img(b, 'm2', { b: 1, sizes: '22vw', reveal: 1, d: .3, nolabel: 1 }) + '</div>' +
-      '<div class="right"><div class="ch-copy" data-reveal>' + meta(b) + '<h2>' + b.title + '</h2><p class="lead">' + b.long + '</p>' + mats(b) + cta + '</div></div></div></div></section>' +
+      '<div class="right"><div class="ch-copy" data-reveal><p class="lead">' + b.long + '</p>' + mats(b) + cta + '</div></div></div></div></section>' +
 
-      '<section class="sec tone-ivory chapter ch-c" id="pj-' + c.id + '"><div class="wrap">' + head(c, 2) +
-      '<div class="ch-grid"><div class="ch-copy" data-reveal>' + meta(c) + '<h2>' + c.title + '</h2><p class="lead">' + c.long + '</p>' + mats(c) + cta + '</div>' +
+      '<section class="spread sp-c chapter ch-c" id="pj-' + c.id + '"><div class="wrap">' + title(c, 2) +
+      '<div class="ch-grid"><div class="ch-copy" data-reveal><p class="lead">' + c.long + '</p>' + mats(c) + cta + '</div>' +
       '<div class="media">' + img(c, 'm1 zoom', { sizes: '(max-width: 960px) 100vw, 55vw', reveal: 1, par: .05 }) + img(c, 'm2', { b: 1, sizes: '22vw', reveal: 1, d: .25, nolabel: 1 }) + '</div></div></div></section>' +
 
-      '<section class="sec-sm tone-ivory chapter ch-d" id="pj-' + d.id + '" style="padding-top:0"><div class="wrap">' + head(d, 3) +
-      '<div class="full">' + img(d, 'zoom', { sizes: '100vw', reveal: 1, par: .05 }) + '<div class="shade"></div><div class="card-over" data-reveal>' + meta(d) + '<h2>' + d.title + '</h2><p class="lead">' + d.long + '</p>' + mats(d) + cta + '</div></div></div></section>' +
+      '<section class="spread sp-d chapter ch-d" id="pj-' + d.id + '"><div class="wrap">' + title(d, 3) +
+      '<div class="full">' + img(d, 'zoom', { sizes: '100vw', reveal: 1, par: .05 }) + '<div class="shade"></div><div class="card-over" data-reveal><p class="lead">' + d.long + '</p>' + mats(d) + cta + '</div></div></div></section>' +
 
-      '<section class="sec tone-olive"><div class="wrap"><div class="sechead"><div><span class="eyebrow">How a project comes together</span><h2 class="h2" data-split style="margin-top:14px">' + sp('From first idea to finished space') + '</h2></div></div>' +
+      '<section class="sec tone-olive arcade-top"><div class="wrap"><div class="sechead"><div><span class="eyebrow">How a project comes together</span><h2 class="h2" data-split style="margin-top:14px">' + sp('From first idea to finished space') + '</h2></div></div>' +
       '<ol class="process">' + [['01', 'Talk it through', 'In the showroom or online: the space, the light, how you live in it, and what it should feel like.'], ['02', 'Choose together', 'Trees chosen in person, materials tested as samples, colours seen in your own daylight.'], ['03', 'Bring it home', 'Delivery planned around the work, with application advice or a workshop where a technique is new to you.']].map((s, i) => '<li data-reveal style="--d:' + (i * .1) + 's"><span class="n">' + s[0] + '</span><h3>' + s[1] + '</h3><p>' + s[2] + '</p></li>').join('') + '</ol>' +
       '<p class="note" style="margin-top:28px;color:var(--on-dark-muted);border-color:var(--on-dark-muted)">Services and delivery options are confirmed before launch.</p></div></section>' +
 
       '<section class="sec tone-ivory"><div class="wrap"><div class="pj-cta" data-reveal>' + slot({ k: 'olive', s: 120, big: 1, w: ['#e5d2ad', '#c4a274'], pot: '#94573a' }, 'zoom', { photo: 'projects-cta', sizes: '(max-width: 960px) 100vw, 40vw' }) +
       '<div class="inner"><span class="eyebrow">Start a project</span><h2 class="h2">Planning something similar?</h2><p style="color:#ecd9c6;max-width:44ch">Tell us about the room, terrace or garden. We will suggest plants and materials that suit it, and how to bring them together.</p>' +
-      '<div class="opts4">' + [['project', 'Discuss a similar project', 'Share the space and your plans'], ['advice', 'Request personal advice', 'Plants, materials or colour'], ['question', 'Contact DaVinci', 'A general question'], ['visit', 'Visit the showroom', 'See it all in person, in Almere']].map((o) => '<a href="#showroom" data-intent="' + o[0] + '"><b>' + o[1] + ARR_L.replace('<svg', '<svg') + '</b><span>' + o[2] + '</span></a>').join('') + '</div></div></div></div></section>';
+      '<div class="opts4">' + [['project', 'Discuss a similar project', 'Share the space and your plans'], ['advice', 'Request personal advice', 'Plants, materials or colour'], ['question', 'Contact DaVinci', 'A general question'], ['visit', 'Visit the showroom', 'See it all in person, in Almere']].map((o) => '<a href="#showroom" data-intent="' + o[0] + '"><b>' + o[1] + ARR_L + '</b><span>' + o[2] + '</span></a>').join('') + '</div></div></div></div></section>';
   }
-
   /* ---------- showroom / contact ---------- */
   const INTENTS = [['visit', 'Book a showroom visit', 'See plants and materials in person.'], ['advice', 'Request personal advice', 'Plants, materials, colour or finishes.'], ['project', 'Discuss an interior project', 'A room, a terrace or a renovation.'], ['question', 'Ask a general question', 'Orders, delivery or anything else.']];
   const TOPICS = [['plants', 'Plant selection'], ['materials', 'Interior materials'], ['colour', 'Colour advice'], ['finishes', 'Decorative finishes'], ['projects', 'Project discussion']];
@@ -389,11 +540,11 @@
   function showroomPage() {
     const k = intent; intent = 'visit';
     const info = '<aside class="info-card" aria-label="Showroom details" data-reveal style="--d:.6s"><span class="eyebrow">Showroom</span><h2>DaVinci, Almere</h2><dl class="facts"><div><dt>Opening</dt><dd>Expected December 2026 <span class="tbc">(to be confirmed)</span></dd></div><div><dt>Address</dt><dd><span class="tbc">To be confirmed</span></dd></div><div><dt>Hours</dt><dd><span class="tbc">To be confirmed</span></dd></div></dl></aside>';
-    return hero('showroom-hero', { k: 'showroomwide', s: 61 }, { side: 'split', size: 'full', cls: 'center', aside: info, copy:
-        '<p class="crumb"><a href="#home">Home</a><span>/</span><span>Showroom / Contact</span></p>' +
-        '<h1 class="h1" data-split>' + sp('Come and see it<br> in <em>daylight</em>') + '</h1>' +
-        '<p class="hero-sub" data-reveal style="--d:.5s">Touch the plaster, compare the tiles, meet the trees. Our showroom in Almere brings Flora and Living together under one roof.</p>' +
-        '<div class="phero-cta" data-reveal style="--d:.65s"><a class="btn ivory" href="#showroom" data-ask="visit">Plan a visit ' + ARR + '</a><a class="btn light" href="#showroom" data-ask="advice">Ask for advice</a></div>' }) +
+    return '<section class="sx2" data-scene><div class="wrap sx2-head"><p class="crumb"><a href="#home">Home</a><span>/</span><span>Showroom &amp; contact</span></p>' +
+      '<h1 class="sx2-t" data-split>' + sp('Come and see it in <em>daylight</em>') + '</h1></div>' +
+      '<div class="sx2-arc"><div class="sx2-img" data-depth="-.2">' + slot({ k: 'showroomwide', s: 61 }, '', { photo: 'showroom-hero', eager: 1, reveal: 1, sizes: '100vw', par: .05 }) + '</div>' + arcade(3, 'sx2-lines') + '</div>' +
+      '<div class="wrap sx2-foot"><div class="sx2-copy"><p class="hero-sub" data-reveal style="--d:.5s">Touch the plaster, compare the tiles, meet the trees. Our showroom in Almere brings Flora and Living together under one roof.</p>' +
+      '<div class="phero-cta" data-reveal style="--d:.65s"><a class="btn" href="#showroom" data-ask="visit">Plan a visit ' + ARR + '</a><a class="btn ghost" href="#showroom" data-ask="advice">Ask for advice</a></div></div>' + info + '</div></section>' +
 
       '<section class="sec tone-ivory"><div class="wrap sr-intro"><div class="copy"><span class="eyebrow" data-reveal>The showroom</span><h2 class="h2" data-split>' + sp('A place to touch and compare') + '</h2>' +
       '<p class="lead" data-reveal>Colour changes with the light and plaster with the hand, so some choices are best made in person. The showroom is planned around three places.</p>' +
@@ -472,7 +623,8 @@
     const navKey = r.p === 'product' ? (prod ? prod.shop : 'home') : r.key.split('-')[0];
     $$('[data-nav]').forEach((a) => a.toggleAttribute('aria-current', a.dataset.nav === navKey) && a.setAttribute('aria-current', 'page'));
     $$('[data-nav]').forEach((a) => { if (a.dataset.nav !== navKey) a.removeAttribute('aria-current'); });
-    cur = r; setMenu(false); motion(main); startMarquees(main); par(); lit(); initContact();
+    document.body.dataset.world = r.p === 'shop' ? r.shop : (prod ? prod.shop : r.p);
+    cur = r; setMenu(false); motion(main); startMarquees(main); par(); lit(); initContact(); scenes(main); init3d(main);
   }
   async function route() {
     const r = parse(), tok = ++navToken;
@@ -482,6 +634,7 @@
       return;
     }
     closeAll();
+    const hd = $('#hdr'); hd.classList.add('navlock'); if (document.activeElement && hd.contains(document.activeElement)) document.activeElement.blur();
     const land = () => {
       window.scrollTo(0, 0);
       if (r.p === 'showroom' && jumpToForm) setTimeout(scrollToForm, 80);
@@ -549,8 +702,7 @@
     requestAnimationFrame(() => {
       const y = window.scrollY, h = $('#hdr');
       h.classList.toggle('scrolled', y > 8);
-      h.classList.toggle('hide', y > lastY + 4 && y > 260 && !document.body.classList.contains('menu-open'));
-      if (y < lastY - 4) h.classList.remove('hide');
+      h.classList.remove('hide');
       nudgeMarquees(y - lastY); lastY = y; par(); lit(); ticking = false;
     });
   }
@@ -563,8 +715,14 @@
 
   /* ---------- events ---------- */
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-ask],[data-again],[data-scroll],[data-add],[data-pdp-add],[data-opt],[data-pq],[data-view],[data-zoom],[data-open-cart],[data-close],[data-open-search],[data-cq],[data-crm],[data-checkout],[data-book],[data-intent],[data-wsf],#burger,#scrim,a[href^="#"]');
+    const t = e.target.closest('[data-3d],[data-shelf],[data-ask],[data-again],[data-scroll],[data-add],[data-pdp-add],[data-opt],[data-pq],[data-view],[data-zoom],[data-open-cart],[data-close],[data-open-search],[data-cq],[data-crm],[data-checkout],[data-book],[data-intent],[data-wsf],#burger,#scrim,a[href^="#"]');
     if (!t) return;
+    if (t.hasAttribute('data-3d')) {
+      const on = t.getAttribute('aria-pressed') !== 'true', gl = $('#pd3d'), st = $('#stage');
+      t.setAttribute('aria-pressed', on); t.querySelector('span').textContent = on ? 'Back to image' : 'View in 3D';
+      gl.hidden = !on; st.hidden = on; if (on) mount3d(gl); return;
+    }
+    if (t.dataset.shelf) { const sh = t.closest('section').querySelector('.shelf'); if (sh) sh.scrollBy({ left: Number(t.dataset.shelf) * sh.clientWidth * .8, behavior: RM ? 'auto' : 'smooth' }); return; }
     if (t.dataset.add) {
       const id = t.dataset.add; addToCart(id); t.classList.add('done'); const old = t.innerHTML; t.innerHTML = TICK + ' Added';
       setTimeout(() => { t.classList.remove('done'); t.innerHTML = old; }, 1800); toast(byId(id).name + ' added', true); e.preventDefault(); return;
@@ -604,7 +762,7 @@
       modal('<h2>Book a place</h2><p style="margin-bottom:6px"><b>' + w.title + '</b></p><p style="color:var(--muted);margin-bottom:22px">' + w.date + ', ' + w.time + ' · ' + eur(w.price) + ' per person</p><form class="form" data-form="book" novalidate>' + fld('b-name', 'Name', '<input id="b-name" autocomplete="name" data-req="Please enter your name." aria-describedby="b-name-err">', 1) + fld('b-mail', 'Email', '<input id="b-mail" type="email" autocomplete="email" data-req="Please enter your email address." aria-describedby="b-mail-err">', 1) + fld('b-n', 'Places', '<select id="b-n"><option>1</option><option>2</option><option>3</option><option>4</option></select>', 1) + '<button class="btn" type="submit">Reserve (demo)</button><p class="note">Demonstration only. Booking is connected before launch.</p><div id="b-ok" aria-live="polite"></div></form>');
       return;
     }
-    if (t.dataset.wsf) { wsFilter = t.dataset.wsf; $$('[data-wsf]').forEach((x) => x.setAttribute('aria-pressed', x === t)); $('#wslist').innerHTML = wsRows(); $$('#wslist .wcard').forEach((x, i) => { x.style.animationDelay = (i * 70) + 'ms'; x.classList.add('enter'); }); return; }
+    if (t.dataset.wsf) { wsFilter = t.dataset.wsf; $$('[data-wsf]').forEach((x) => x.setAttribute('aria-pressed', x === t)); $('#wslist').innerHTML = wsRows(); $$('#wslist .wt').forEach((x, i) => { x.style.animationDelay = (i * 70) + 'ms'; x.classList.add('enter'); }); return; }
     if (t.dataset.intent) {
       if (cur && cur.p === 'showroom' && t.getAttribute('href') === '#showroom') { e.preventDefault(); closeAll(); applyIntent(t.dataset.intent); scrollToForm(); return; }
       intent = t.dataset.intent; jumpToForm = true;
@@ -650,6 +808,7 @@
   /* keyboard: Escape closes; Tab stays inside an open dialog, drawer, search or menu */
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { closeAll(); return; }
+    if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) && !$('.search.on')) { e.preventDefault(); setMenu(false); layer('#search', true); runSearch($('#sq').value); return; }
     if (e.key !== 'Tab') return;
     const box = $('.modal.on .modal-box') || $('.drawer.on') || $('.search.on');
     const menu = document.body.classList.contains('menu-open');
@@ -667,5 +826,9 @@
   window.addEventListener('resize', () => { par(); lit(); });
 
   mountChrome();
+  /* after choosing from a menu, keep it closed until the pointer leaves that menu item */
+  $('#hdr').addEventListener('pointerover', (e) => { if (!e.target.closest('.nav-item')) $('#hdr').classList.remove('navlock'); });
+  $('#hdr').addEventListener('pointerleave', () => $('#hdr').classList.remove('navlock'));
+  $('#hdr').addEventListener('keydown', () => $('#hdr').classList.remove('navlock'));
   route();
 })();

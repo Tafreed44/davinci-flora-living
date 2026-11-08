@@ -5,20 +5,21 @@
    Heroes also have a mobile crop: img/<slot>-m-600.webp and img/<slot>-m-1200.webp.
    fx = focal point on desktop, fxm = focal point on phones (CSS object-position). */
 window.DV_PHOTOS = {
-  ready: {},
+  ready: {'flora-hero': 1, 'home-bridge': 1, 'home-door-flora': 1, 'home-door-living': 1, 'home-flora-detail': 1, 'home-flora-feature': 1, 'home-hero': 1, 'home-hero2': 1, 'home-living-detail': 1, 'home-living-feature': 1, 'living-hero': 1},
   slots: {
-    'home-hero': { hero: 1, fx: '62% 55%', fxm: '60% 60%', alt: 'A Mediterranean courtyard with a mature olive tree in a terracotta pot against limewashed stone walls' },
-    'flora-hero': { hero: 1, fx: '65% 55%', fxm: '58% 60%', alt: 'Olive and lemon trees in terracotta pots on a sunlit terrace' },
-    'living-hero': { hero: 1, fx: '35% 50%', fxm: '40% 50%', alt: 'A lime-plastered interior with arches and a stone floor in raking daylight' },
+    'home-hero2': { hero: 1, fx: '58% 60%', fxm: '62% 70%', alt: 'A plant studio with orchids, potting tools and trailing pothos against an olive-green wall' },
+    'home-hero': { hero: 1, fx: '50% 58%', fxm: '38% 55%', alt: 'Potted plants on warm wooden shelves with a linen apron and a straw hat, against a soft white wall' },
+    'flora-hero': { hero: 1, fx: '50% 42%', fxm: '50% 45%', alt: 'A wooden shelf of flowering plants in pots against a red patterned wall' },
+    'living-hero': { hero: 1, fx: '50% 50%', fxm: '45% 55%', alt: 'A dining room with a weathered lime-plaster wall, pale wooden floor and wooden chairs, seen through tall white doors' },
     'workshops-hero': { hero: 1, fx: '68% 50%', fxm: '60% 50%', alt: 'Hands at a workshop table with plaster samples, colour swatches and olive cuttings' },
 
-    'home-door-flora': { fx: '50% 40%', alt: 'Silver olive leaves against a warm stone wall' },
-    'home-door-living': { fx: '50% 45%', alt: 'A plastered arch and niche in soft daylight' },
-    'home-bridge': { fx: '50% 50%', alt: 'Colour swatches, plaster samples and cuttings on a workshop table' },
-    'home-flora-feature': { fx: '50% 45%', alt: 'A lemon tree with ripe fruit in a terracotta pot' },
-    'home-living-feature': { fx: '50% 50%', alt: 'Plaster samples, tiles and paint swatches laid out together' },
-    'home-flora-detail': { alt: 'Olive leaves and fruit, close up' },
-    'home-living-detail': { alt: 'A lime plaster sample, close up' },
+    'home-door-flora': { fx: '40% 38%', alt: 'Ripe oranges on a citrus tree against a soft cloudy sky' },
+    'home-door-living': { fx: '45% 52%', alt: 'An arched entrance with a cream door, a curved stone balustrade and potted plants on the steps' },
+    'home-bridge': { fx: '48% 62%', alt: 'A rosemary plant in a metal pot beside bottles of olive oil, with an olive branch, on a wooden table' },
+    'home-flora-feature': { fx: '50% 48%', alt: 'A gardener in a straw hat potting succulents and other plants at a sunny outdoor table' },
+    'home-living-feature': { fx: '51% 50%', alt: 'A living room with a cream panelled wall, dark navy mouldings, brass wall lights and a light linen sofa' },
+    'home-flora-detail': { fx: '52% 58%', alt: 'A money tree in a pale blue pot on a sunny wooden table with a watering can and pruning shears' },
+    'home-living-detail': { fx: '50% 55%', alt: 'A fan palm in an engraved green pot against a pink plaster wall with green zellige tiles' },
     'home-nextstep': { fx: '50% 50%', alt: 'A styled corner with an olive tree and plastered wall' },
     'flora-care': { alt: 'Pruning an olive tree in winter light' },
 
